@@ -16,6 +16,10 @@ Jesse Fornear ([@jfornear](https://x.com/jfornear))
 - Offline support via PWA
 - Share race results via email
 
+## Demo
+
+Try the app: [Texas Water Safari Captain's Checklist](https://jfornear.s3.us-west-2.amazonaws.com/tws/captains-checklist.html?1)
+
 ## Screenshot
 
 ![App Screenshot](app-screenshot.png?1)
