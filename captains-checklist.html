@@ -1,0 +1,1978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#FF4B00">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TWS 2025">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <title>Texas Water Safari 2025 - Captain's Checklist</title>
+    <style>
+        /* ===== BASE STYLES ===== */
+        /* CSS RESET */
+        html, body {
+            width: 100%;
+            height: 100%;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
+            touch-action: manipulation;
+        }
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html {
+            color-scheme: dark;
+        }
+        :root {
+            --suunto-black: #181A1B;
+            --suunto-card: #232425;
+            --suunto-orange: #FF4B00;
+            --strava-orange: #FC4C02;
+            --suunto-blue: #0090FF;
+            --suunto-white: #F5F5F5;
+            --suunto-gray: #B0B0B0;
+        }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: var(--suunto-black);
+            color: var(--suunto-white);
+            min-height: 100vh;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            position: relative;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: inherit;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            line-height: 1.2;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            letter-spacing: 0.02em;
+        }
+
+        /* ===== LAYOUT ===== */
+        #checkpoints {
+            width: 100%;
+            max-width: 600px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 env(safe-area-inset-left) 0 env(safe-area-inset-right);
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 28px 0 16px 0;
+            background: var(--suunto-black);
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .race-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 16px;
+            justify-content: center;
+            margin: 22px 0 0 0;
+            background: none;
+            box-shadow: none;
+            padding: 0 12px;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .race-timer {
+            font-family: 'Share Tech Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-align: center;
+            margin: 28px auto 0 auto;
+            color: var(--suunto-orange);
+            border-radius: 32px;
+            padding: 28px 0;
+            width: 100%;
+            max-width: 600px;
+            letter-spacing: 0.09em;
+        }
+        .race-status {
+            text-align: center;
+            margin: 16px 0 0 0;
+            font-size: 1.18em;
+            font-weight: 600;
+            color: var(--suunto-orange);
+            letter-spacing: 0.03em;
+        }
+
+        /* ===== CHECKPOINT CARD ===== */
+        .checkpoint {
+            background: var(--suunto-card);
+            color: var(--suunto-white);
+            border: 2px solid var(--suunto-card);
+            border-radius: 22px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
+            margin-bottom: 0;
+            padding: 0 0 32px 0;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            box-sizing: border-box;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .checkpoint.next {
+            border-left: 6px solid var(--suunto-orange);
+            box-shadow: 0 4px 16px 0 rgba(255,75,0,0.13);
+        }
+        .checkpoint.completed {
+            border-color: var(--suunto-card);
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
+        }
+        .checkpoint-header {
+            padding: 28px 28px 0 28px;
+            width: 100%;
+            text-align: left;
+            border-bottom: 1px solid var(--suunto-card);
+            display: block;
+        }
+        .checkpoint-name {
+            font-size: 1.5em;
+            font-weight: 800;
+            color: var(--suunto-white);
+            margin-bottom: 2px;
+            letter-spacing: 0.01em;
+            line-height: 1.2;
+        }
+        .checkpoint-mile {
+            font-size: 1.13em;
+            font-weight: 600;
+            color: var(--suunto-gray);
+            margin-bottom: 0;
+            display: block;
+        }
+        .checkpoint-time {
+            color: var(--suunto-gray);
+            font-size: 1.08em;
+            font-weight: 600;
+            margin: 10px 0 0 0;
+            line-height: 1.5;
+        }
+        .checkpoint-details {
+            margin-top: 0;
+            width: 100%;
+            padding: 0 28px 0 28px;
+        }
+        .checkpoint-position {
+            margin: 18px 0 0 0;
+            font-size: 1.13em;
+            font-weight: 700;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--suunto-white);
+            background: var(--suunto-card);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .checkpoint-position .icon {
+            font-size: 1.2em;
+            margin-right: 4px;
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            margin-top: 18px;
+            padding: 18px 0 0 0;
+            background: none;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .section-title {
+            font-size: 1.13em;
+            font-weight: 700;
+            color: var(--suunto-blue);
+            margin-bottom: 8px;
+            letter-spacing: 0.01em;
+        }
+        .section-list {
+            list-style-type: disc;
+            margin: 0 0 0 22px;
+            padding: 0;
+            font-size: 1.08em;
+            line-height: 1.4;
+        }
+        .section-list li {
+            margin: 3px 0;
+            font-size: 1.08em;
+            text-align: left;
+            white-space: normal;
+            color: var(--suunto-white);
+            line-height: 1.4;
+        }
+        .section-list li .icon {
+            font-size: 1.1em;
+            margin-right: 4px;
+            color: var(--suunto-orange);
+        }
+        .task-list, .exchange-list, .pace-info, .sleep-info {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            font-size: 1.08em;
+            line-height: 1.4;
+        }
+        .task-list li, .exchange-list li, .pace-info p, .sleep-info p {
+            margin: 3px 0;
+            font-size: 1.08em;
+            text-align: left;
+            white-space: normal;
+            color: var(--suunto-white);
+            line-height: 1.4;
+        }
+        .exchange-list li .icon {
+            font-size: 1.1em;
+            margin-right: 4px;
+            color: var(--suunto-orange);
+        }
+
+        /* ===== BUTTONS ===== */
+        .checkpoint-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 18px 0 0 0;
+            padding: 0;
+            border: none;
+            width: 100%;
+        }
+        .checkpoint-button {
+            width: 100%;
+            font-size: 1.18em;
+            padding: 18px 0;
+            border-radius: 20px;
+            font-weight: 800;
+            box-shadow: 0 2px 8px 0 rgba(0,0,0,0.10);
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, border 0.15s, filter 0.15s;
+            border: 2px solid var(--suunto-orange);
+            background: var(--suunto-orange);
+            color: var(--suunto-white);
+        }
+        .checkpoint-button:active,
+        .checkpoint-button:not(.reset-button):active {
+            filter: brightness(0.93);
+            background: var(--suunto-orange);
+            color: var(--suunto-white);
+            border-color: var(--suunto-orange);
+        }
+        .checkpoint-button.reset-button {
+            background: var(--suunto-black);
+            color: var(--suunto-orange);
+            border: 2px solid var(--suunto-orange);
+        }
+        .checkpoint-button.reset-button:active {
+            background: var(--suunto-orange);
+            color: var(--suunto-white);
+        }
+        .checkpoint-button:disabled {
+            background: var(--suunto-card);
+            color: var(--suunto-gray);
+            border: 2px solid var(--suunto-card);
+            filter: grayscale(0.5) brightness(0.95);
+            cursor: not-allowed;
+        }
+        .checkpoint-button.complete-button {
+            background: var(--suunto-orange);
+            color: var(--suunto-white);
+            border: 2px solid var(--suunto-orange);
+            width: 100%;
+            margin: 0;
+            display: block;
+            font-size: 1.18em;
+            padding: 18px 0;
+            border-radius: 20px;
+            font-weight: 800;
+            box-shadow: 0 2px 8px 0 rgba(0,0,0,0.10);
+            cursor: pointer;
+        }
+        .checkpoint-button.complete-button:active {
+            filter: brightness(0.93);
+        }
+
+        /* ===== MAP BUTTONS ===== */
+        .map-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 32px 0 32px 0;
+            width: 100%;
+        }
+        .map-buttons a {
+            display: block;
+            width: 100%;
+            min-width: 0;
+            margin: 0;
+            padding: 13px 0;
+            font-size: 1.08em;
+            font-weight: 700;
+            color: var(--suunto-blue) !important;
+            background: var(--suunto-card);
+            border: 2px solid var(--suunto-blue);
+            border-radius: 999px;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 1px 4px 0 rgba(0,0,0,0.07);
+            transition: background 0.15s, color 0.15s, border 0.15s;
+            letter-spacing: 0.01em;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        @media (hover: none) {
+            .map-buttons a:hover {
+                background: var(--suunto-card);
+                color: var(--suunto-blue) !important;
+                border-color: var(--suunto-blue);
+            }
+        }
+
+        /* ===== MODALS ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(24,26,27,0.92);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: var(--suunto-card);
+            color: var(--suunto-white);
+            padding: 38px 28px 32px 28px;
+            border-radius: 22px;
+            max-width: 420px;
+            width: 92vw;
+            text-align: center;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            box-shadow: 0 6px 32px 0 rgba(0,0,0,0.22);
+        }
+        .modal-content h3 {
+            font-size: 2em;
+            font-weight: 900;
+            margin-bottom: 18px;
+            color: var(--suunto-white);
+            letter-spacing: 0.01em;
+        }
+        .modal-content p {
+            font-size: 1.18em;
+            color: var(--suunto-white);
+            margin-bottom: 28px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+            justify-content: center;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        .modal-button {
+            padding: 16px 0;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 1.18em;
+            border: 2px solid var(--suunto-orange);
+            background: var(--suunto-black);
+            color: var(--suunto-orange);
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.15s, color 0.15s, border 0.15s;
+            margin-bottom: 0;
+        }
+        .modal-button.confirm-button {
+            background: var(--suunto-orange);
+            color: var(--suunto-white);
+            border: 2px solid var(--suunto-orange);
+            font-weight: 900;
+        }
+        .modal-button.cancel-button {
+            background: var(--suunto-black);
+            color: var(--suunto-orange);
+            border: 2px solid var(--suunto-orange);
+            font-weight: 800;
+        }
+        .modal-button.cancel-button:active {
+            background: var(--suunto-orange);
+            color: var(--suunto-white);
+        }
+        #checkpointResetModal {
+            z-index: 1100;
+        }
+
+        /* ===== TIMELINE ===== */
+        #timeline {
+            margin-top: 48px;
+            margin-bottom: 32px;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 24px 18px 24px 24px;
+        }
+        .timeline-outer {
+            width: 100%;
+            padding: 0 0 0 0;
+        }
+        .timeline-list {
+            list-style: none;
+            margin: 0;
+            padding: 0 0 0 12px;
+            border-left: 3px solid var(--suunto-card);
+        }
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            position: relative;
+            min-height: 18px;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+        .timeline-item:hover {
+            opacity: 0.8;
+        }
+        .timeline-dot {
+            width: 16px;
+            height: 16px;
+            background: var(--suunto-card);
+            border: 3px solid var(--suunto-orange);
+            border-radius: 50%;
+            position: absolute;
+            left: -21px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+        .timeline-item.checked-in .timeline-dot {
+            background: var(--suunto-orange);
+        }
+        .timeline-item.current .timeline-dot {
+            border-color: var(--suunto-blue);
+            box-shadow: 0 0 0 4px rgba(0,144,255,0.18);
+        }
+        .timeline-label {
+            flex: 1;
+            font-size: 1.08em;
+            color: var(--suunto-white);
+            font-weight: 700;
+            margin-left: 12px;
+        }
+        .timeline-time {
+            font-size: 1em;
+            color: var(--suunto-gray);
+            font-weight: 600;
+            margin-left: 18px;
+            min-width: 90px;
+            text-align: right;
+        }
+        .timeline-item.current .timeline-label {
+            color: var(--suunto-blue);
+        }
+        .timeline-item.current .timeline-time {
+            color: var(--suunto-blue);
+        }
+
+        /* ===== MOBILE STYLES ===== */
+        @media (max-width: 600px) {
+            header {
+                padding: 8px 0 4px 0;
+            }
+            h1 {
+                font-size: 1.18em;
+                margin-bottom: 6px;
+            }
+            .modal-content h3 {
+                font-size: 1.5em;
+                margin-bottom: 12px;
+            }
+            .modal-content p {
+                font-size: 1.08em;
+                margin-bottom: 20px;
+                line-height: 1.4;
+            }
+            .modal-button {
+                font-size: 1.18em;
+                padding: 16px 0;
+                min-height: 52px;
+            }
+            .race-timer {
+                width: 100%;
+                max-width: 100%;
+                font-size: 1.5em;
+                padding: 10px 0 10px 0;
+                margin-bottom: 10px;
+                box-sizing: border-box;
+            }
+            .checkpoint {
+                border-radius: 10px;
+                padding: 8px 0 2px 0;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            .checkpoint-header {
+                padding: 8px 12px 4px 12px;
+                margin-bottom: 2px;
+            }
+            .checkpoint-details {
+                padding: 0 12px 4px 12px;
+            }
+            .goal-times {
+                padding: 0 12px 0 12px;
+                margin-bottom: 0;
+            }
+            .checkpoint-name {
+                font-size: 1.25em;
+                margin-bottom: 2px !important;
+            }
+            .checkpoint-time {
+                font-size: 0.93em;
+                margin-bottom: 2px;
+            }
+            .goal-times {
+                margin-top: 4px;
+            }
+            .section {
+                margin-top: 4px;
+                padding-top: 12px;
+            }
+            .section-title {
+                font-size: 0.97em;
+                margin-bottom: 2px;
+                margin-top: 0;
+            }
+            .section-list, .task-list, .exchange-list, .pace-info, .sleep-info {
+                font-size: 0.93em;
+                line-height: 1.4;
+                margin-bottom: 4px;
+                margin-top: 0;
+            }
+            .section-list li, .task-list li, .exchange-list li, .pace-info p, .sleep-info p {
+                font-size: 0.93em;
+                line-height: 1.4;
+                margin-bottom: 3px;
+            }
+            .map-buttons {
+                margin: 32px 0 32px 0;
+                gap: 4px;
+            }
+            .map-buttons a {
+                font-size: 1.08em;
+                padding: 12px 0;
+                margin-bottom: 2px;
+            }
+            .map-buttons a + a {
+                margin-top: 2px;
+            }
+            .checkpoint-button, .modal-button {
+                font-size: 0.97em;
+                min-height: 44px;
+                padding: 12px 0;
+                border-radius: 10px;
+            }
+            .pace-info, .pace-badge {
+                font-size: 0.93em;
+                padding: 0 0 2px 0;
+                margin-bottom: 0;
+            }
+            #timeline {
+                padding: 12px 6px 12px 12px;
+                margin-top: 10px;
+                margin-bottom: 14px;
+            }
+            .timeline-label { 
+                font-size: 0.90em; 
+            }
+            .timeline-time { 
+                font-size: 0.88em; 
+                min-width: 54px; 
+            }
+            .timeline-dot { 
+                width: 10px; 
+                height: 10px; 
+                left: -8px; 
+            }
+            .timeline-list { 
+                padding-left: 2px; 
+            }
+            .timeline-item { 
+                margin-bottom: 16px; 
+                min-height: 18px; 
+            }
+            .section {
+                margin-top: 4px;
+            }
+            .checkpoint-controls,
+            .finish-controls {
+                margin-bottom: 18px;
+            }
+            
+            /* Touch feedback for all buttons */
+            .checkpoint-button:active,
+            .map-buttons a:active,
+            .modal-button:active {
+                opacity: 0.85;
+                filter: brightness(0.95);
+            }
+            
+            /* Keep orange buttons solid on focus */
+            .checkpoint-button.complete-button:focus,
+            .checkpoint-button:not(.reset-button):focus {
+                background: var(--suunto-orange);
+                color: var(--suunto-white);
+                border-color: var(--suunto-orange);
+                outline: none;
+            }
+            
+            /* Remove focus states for other elements */
+            .map-buttons a:focus,
+            .modal-button:focus,
+            button:focus,
+            a:focus {
+                outline: none;
+            }
+            
+            /* Reset button specific focus state */
+            .checkpoint-button.reset-button:focus {
+                background: var(--suunto-black);
+                color: var(--suunto-orange);
+                border-color: var(--suunto-orange);
+                outline: none;
+            }
+        }
+
+        /* ===== MODAL SPECIFIC STYLES ===== */
+        #timelineModal .modal-content {
+            max-height: 90vh;
+            overflow-y: auto;
+            text-align: left;
+        }
+        #timelineModal .section-title {
+            text-align: left;
+        }
+        #timelineModal .checkpoint-header {
+            text-align: left;
+        }
+        #timelineModal .checkpoint-name {
+            text-align: left;
+        }
+        #timelineModal .checkpoint-time {
+            text-align: left;
+        }
+        #timelineModal .goal-times {
+            text-align: left;
+        }
+        #timelineModal .pace-info {
+            text-align: left;
+        }
+        #timelineModal .checkpoint-controls:empty {
+            margin: 0;
+            display: none;
+        }
+    </style>
+    <script>
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('https://jfornear.s3.us-west-2.amazonaws.com/tws/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div style="max-width: 600px; margin: 0 auto; padding: 0;">
+            <h1>Texas Water Safari 2025</h1>
+            <!-- <p>Team Captain Checkpoints</p> -->
+            <div class="race-controls">
+                <button class="checkpoint-button start-race-button" id="startRace">Start</button>
+                <button class="checkpoint-button reset-button" id="resetRace">Reset</button>
+            </div>
+            <div class="race-timer" id="raceTimer">00:00:00:00</div>
+        </div>
+    </header>
+
+    <div id="resetConfirmModal" class="modal">
+        <div class="modal-content">
+            <h3>Reset Race?</h3>
+            <p>This will clear all checkpoint times and race data. This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button class="modal-button confirm-button" id="confirmReset">Yes, Reset Race</button>
+                <button class="modal-button cancel-button" id="cancelReset">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="checkpointResetModal" class="modal">
+        <div class="modal-content">
+            <h3>Reset Checkpoint?</h3>
+            <p>This will undo the check-in for this checkpoint. This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button class="modal-button confirm-button" id="confirmCheckpointReset">Yes, Reset Checkpoint</button>
+                <button class="modal-button cancel-button" id="cancelCheckpointReset">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="checkpoints">
+        <!-- Checkpoints will be dynamically populated here -->
+    </div>
+
+    <div id="timeline" style="max-width:600px;margin:32px auto;"></div>
+
+    <!-- Add modal for timeline navigation -->
+    <div id="timelineModal" class="modal">
+        <div class="modal-content" style="max-width: 600px; width: 92vw; padding: 0;">
+            <div id="modalCheckpoint"></div>
+        </div>
+    </div>
+
+    <script>
+        const RACE_START = new Date('2025-06-13T09:00:00');
+        let raceStarted = false;
+        let raceStartTime = null;
+        let timerInterval = null;
+        
+        const checkpoints = [
+            {
+                name: "Race Start",
+                mile: "0",
+                time: "Fri 9:00 AM",
+                position: "The Meadows Center, Spring Lake, San Marcos, TX",
+                exchange: ["Be at boats by 8:00 AM", "Wait for official permission to enter water"],
+                isStart: true,
+                maps: {
+                    google: "https://maps.google.com/?q=29.8897,-97.9389",
+                    apple: "https://maps.apple.com/?q=29.8897,-97.9389"
+                }
+            },
+            {
+                name: "Staples Dam",
+                mile: "16.6",
+                time: "Fri ~12:30 PM (Deadline 2 PM)",
+                position: "River RIGHT below the dam, on rocks",
+                exchange: ["1W (×2)", "MG Spiz"],
+                napTime: "30 min",
+                maps: {
+                    google: "https://maps.google.com/?q=29.782312,-97.83131",
+                    apple: "https://maps.apple.com/?q=29.782312,-97.83131"
+                }
+            },
+            {
+                name: "Fentress",
+                mile: "26",
+                time: "Fri ~3:00 PM",
+                position: "River LEFT on the beach",
+                exchange: ["1W (×2)", "1F (×2)"],
+                napTime: "45 min",
+                maps: {
+                    google: "https://maps.google.com/?q=29.752618,-97.781095",
+                    apple: "https://maps.apple.com/?q=29.752618,-97.781095"
+                }
+            },
+            {
+                name: "Stairtown",
+                mile: "33",
+                time: "Fri ~4:30 PM",
+                position: "River LEFT under the bridge",
+                exchange: ["1W (×2)"],
+                napTime: "30 min",
+                maps: {
+                    google: "https://maps.google.com/?q=29.712696,-97.738347",
+                    apple: "https://maps.apple.com/?q=29.712696,-97.738347"
+                }
+            },
+            {
+                name: "Luling",
+                mile: "39.62",
+                time: "Fri ~6:00 PM (Deadline 8 PM)",
+                position: "River LEFT on the beach",
+                exchange: ["1W (×2)", "1F (×2)", "MG Spiz"],
+                napTime: "90 min",
+                maps: {
+                    google: "https://maps.google.com/?q=29.667722,-97.69978",
+                    apple: "https://maps.apple.com/?q=29.667722,-97.69978"
+                }
+            },
+            {
+                name: "Luling Zedler Dam",
+                mile: "45.6",
+                time: "Fri ~7:30 PM",
+                position: "In the water below dam, river RIGHT",
+                exchange: ["2W (×2)"],
+                napTime: "30 min",
+                maps: {
+                    google: "https://maps.google.com/?q=29.666467,-97.651382",
+                    apple: "https://maps.apple.com/?q=29.666467,-97.651382"
+                }
+            },
+            {
+                name: "Palmetto",
+                mile: "60",
+                time: "Fri ~11:00 PM",
+                position: "River RIGHT - watch other teams for portage decision",
+                exchange: ["2W (×2)", "1F (×2)", "MG Spiz"],
+                napTime: "120 min",
+                maps: {
+                    google: "https://maps.google.com/?q=29.589948,-97.585067",
+                    apple: "https://maps.apple.com/?q=29.589948,-97.585067"
+                }
+            },
+            {
+                name: "Optional Sleep: Friday Night",
+                mile: "60.5",
+                time: "Fri Night (suggested 12:00 AM–2:00 AM)",
+                position: "Rest area or safe riverside spot",
+                exchange: ["Sleep (up to 2 hours)", "Alarm set"],
+                napTime: "120 min",
+                maps: {
+                    google: "https://maps.google.com/?q=29.589948,-97.585067",
+                    apple: "https://maps.apple.com/?q=29.589948,-97.585067"
+                }
+            },
+            {
+                name: "Gonzalez Dam",
+                mile: "85",
+                time: "Sat ~6:00 AM (Deadline 2 PM)",
+                position: "River LEFT above dam - accompany team on portage walk",
+                exchange: ["4W (×2)", "1LF (×2)"],
+                napTime: "90 min",
+                maps: {
+                    google: "https://maps.google.com/?q=29.497036,-97.45554",
+                    apple: "https://maps.apple.com/?q=29.497036,-97.45554"
+                }
+            },
+            {
+                name: "Hochheim",
+                mile: "123",
+                time: "Sat ~3:00 PM (Deadline 4 AM Sun)",
+                position: "Near steep slope down to river",
+                exchange: ["2W (×2)", "1F (×2)"],
+                napTime: "90 min",
+                maps: {
+                    google: "https://maps.google.com/?q=29.314262,-97.30321",
+                    apple: "https://maps.apple.com/?q=29.314262,-97.30321"
+                }
+            },
+            {
+                name: "Cheapside",
+                mile: "147",
+                time: "Sat ~11:00 PM",
+                position: "River access point",
+                exchange: ["1W (×2)", "MG Spiz"],
+                napTime: "120 min",
+                maps: {
+                    google: "https://maps.google.com/?q=29.147265,-97.317855",
+                    apple: "https://maps.apple.com/?q=29.147265,-97.317855"
+                }
+            },
+            {
+                name: "Optional Sleep: Saturday Night",
+                mile: "147.5",
+                time: "Sat Night (suggested 12:00 AM–2:00 AM)",
+                position: "Rest area or safe riverside spot",
+                exchange: ["Sleep (up to 2 hours)", "Alarm set"],
+                napTime: "120 min",
+                maps: {
+                    google: "https://maps.google.com/?q=29.147265,-97.317855",
+                    apple: "https://maps.apple.com/?q=29.147265,-97.317855"
+                }
+            },
+            {
+                name: "Cuero",
+                mile: "157",
+                time: "Sun ~5:00 AM",
+                position: "River access point",
+                exchange: ["2W (×2)", "1F (×2)"],
+                napTime: "90 min",
+                maps: {
+                    google: "https://maps.google.com/?q=29.051293,-97.265117",
+                    apple: "https://maps.apple.com/?q=29.051293,-97.265117"
+                }
+            },
+            {
+                name: "Thomaston Bridge",
+                mile: "178",
+                time: "Sun ~9:30 AM",
+                position: "River RIGHT, steep access to bank",
+                exchange: ["2W (×2)", "1F (×2)", "MG Spiz"],
+                napTime: "45 min",
+                maps: {
+                    google: "https://maps.google.com/?q=28.974712,-97.187881",
+                    apple: "https://maps.apple.com/?q=28.974712,-97.187881"
+                }
+            },
+            {
+                name: "Victoria City Park Boat Ramp",
+                mile: "200",
+                time: "Sun ~2:00 PM",
+                position: "In the water at the boat ramp",
+                exchange: ["3W (×2)", "1F (×2)"],
+                napTime: "90 min",
+                maps: {
+                    google: "https://maps.google.com/?q=28.824706,-97.01542",
+                    apple: "https://maps.apple.com/?q=28.824706,-97.01542"
+                }
+            },
+            {
+                name: "Swinging Bridge",
+                mile: "231",
+                time: "Sun ~8:00 PM",
+                position: "River LEFT",
+                exchange: ["2W (×2)", "1F (×2)"],
+                napTime: "120 min",
+                maps: {
+                    google: "https://maps.google.com/?q=28.651783,-96.962229",
+                    apple: "https://maps.apple.com/?q=28.651783,-96.962229"
+                }
+            },
+            {
+                name: "Optional Sleep: Sunday Night",
+                mile: "231.5",
+                time: "Sun Night (suggested 12:00 AM–2:00 AM)",
+                position: "Rest area or safe riverside spot",
+                exchange: ["Sleep (up to 2 hours)", "Alarm set"],
+                napTime: "120 min",
+                maps: {
+                    google: "https://maps.google.com/?q=28.651783,-96.962229",
+                    apple: "https://maps.apple.com/?q=28.651783,-96.962229"
+                }
+            },
+            {
+                name: "Papa & Maga / Calhoun Tivoli",
+                mile: "251",
+                time: "Mon ~3:00 AM",
+                position: "At boat ramp dock — in water or on dock",
+                exchange: ["2W (×2)", "1F (×2)", "MG Spiz"],
+                napTime: "90 min",
+                maps: {
+                    google: "https://maps.google.com/?q=28.476484,-96.861536",
+                    apple: "https://maps.apple.com/?q=28.476484,-96.861536"
+                }
+            },
+            {
+                name: "Finish",
+                mile: "260",
+                time: "",
+                position: "Seadrift Finish Line",
+                exchange: [],
+                napTime: "",
+                maps: {
+                    google: "https://maps.google.com/?q=28.4146,-96.7131",
+                    apple: "https://maps.apple.com/?q=28.4146,-96.7131"
+                },
+                isFinish: true
+            }
+        ];
+
+        // Update goal times for new categories
+        const checkpointGoals = {
+            "Staples Dam": {mile: 16.6, g65: "10:36 AM", g70: "11:01 AM", g80: "12:06 PM", g85: "12:41 PM", g90: "1:16 PM", g100: "2:06 PM"},
+            "Fentress": {mile: 26, g65: "12:16 PM", g70: "12:49 PM", g80: "2:00 PM", g85: "2:41 PM", g90: "3:22 PM", g100: "4:30 PM"},
+            "Stairtown": {mile: 33, g65: "1:16 PM", g70: "1:52 PM", g80: "3:06 PM", g85: "3:51 PM", g90: "4:36 PM", g100: "5:51 PM"},
+            "Luling": {mile: 39.62, g65: "2:09 PM", g70: "2:49 PM", g80: "4:08 PM", g85: "4:58 PM", g90: "5:48 PM", g100: "7:13 PM"},
+            "Luling Zedler Dam": {mile: 45.6, g65: "2:56 PM", g70: "3:42 PM", g80: "5:03 PM", g85: "5:58 PM", g90: "6:53 PM", g100: "8:36 PM"},
+            "Palmetto": {mile: 60, g65: "5:01 PM", g70: "5:51 PM", g80: "7:39 PM", g85: "8:51 PM", g90: "10:03 PM", g100: "12:31 AM"},
+            "Gonzalez Dam": {mile: 85, g65: "8:19 PM", g70: "9:25 PM", g80: "11:44 PM", g85: "1:16 AM", g90: "2:48 AM", g100: "5:35 AM"},
+            "Hochheim": {mile: 123, g65: "1:44 AM", g70: "3:01 AM", g80: "4:46 AM", g85: "6:13 AM", g90: "7:40 AM", g100: "10:58 AM"},
+            "Cheapside": {mile: 147, g65: "5:13 AM", g70: "6:40 AM", g80: "8:50 AM", g85: "10:28 AM", g90: "12:06 PM", g100: "3:11 PM"},
+            "Cuero": {mile: 157, g65: "6:08 AM", g70: "7:38 AM", g80: "9:50 AM", g85: "11:32 AM", g90: "1:14 PM", g100: "4:27 PM"},
+            "Thomaston Bridge": {mile: 178, g65: "8:09 AM", g70: "9:44 AM", g80: "12:16 PM", g85: "2:08 PM", g90: "4:00 PM", g100: "7:09 PM"},
+            "Victoria City Park Boat Ramp": {mile: 200, g65: "10:38 AM", g70: "12:23 PM", g80: "2:51 PM", g85: "4:54 PM", g90: "6:57 PM", g100: "10:29 PM"},
+            "Swinging Bridge": {mile: 231, g65: "3:55 PM", g70: "4:43 PM", g80: "7:55 PM", g85: "10:13 PM", g90: "12:31 AM", g100: "5:21 AM"},
+            "Papa & Maga / Calhoun Tivoli": {mile: 251, g65: "6:25 PM", g70: "7:19 PM", g80: "12:04 AM", g85: "2:36 AM", g90: "5:08 AM", g100: "9:43 AM"}
+        };
+
+        // Helper to get new goal times for a checkpoint
+        function getGoalTimes(name, currentPace) {
+            const totalMiles = 260; // Total race distance
+            const hoursToFinish = totalMiles / currentPace;
+            const finishDate = new Date(RACE_START.getTime() + (hoursToFinish * 60 * 60 * 1000));
+            
+            return `
+                <div class="section" style="margin-top:8px;">
+                    <div class="section-title">Pace</div>
+                    <ul class="exchange-list">
+                        <li><span style="color:var(--suunto-white);font-weight:700;">${currentPace.toFixed(1)} mph</span><span style="color:var(--suunto-gray);font-weight:400;"> &nbsp;|&nbsp; </span><span style="color:var(--suunto-white);font-weight:700;">${Math.round(hoursToFinish)}h</span></li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function formatTime(date) {
+            return date.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: true 
+            });
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        function calculatePace(startMile, endMile, startTime, endTime) {
+            const miles = endMile - startMile;
+            const hours = (endTime - startTime) / (1000 * 60 * 60);
+            return miles / hours;
+        }
+
+        function estimateNextTime(currentMile, nextMile, currentTime, pace) {
+            const milesToNext = nextMile - currentMile;
+            const hoursToNext = milesToNext / pace;
+            return new Date(currentTime.getTime() + (hoursToNext * 60 * 60 * 1000));
+        }
+
+        function updateEstimatedTimes(lastCheckpoint) {
+            if (!lastCheckpoint) return;
+            const currentPace = calculateCurrentPace();
+            const remainingCheckpoints = checkpoints.filter(cp => 
+                parseFloat(cp.mile) > parseFloat(lastCheckpoint.mile)
+            );
+            remainingCheckpoints.forEach(cp => {
+                const cpGoal = checkpointGoals[cp.name];
+                if (cpGoal) {
+                    const hoursFromStart = cpGoal.mile / currentPace;
+                    const arrival = new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
+                    const checkpointElement = document.querySelector(`[data-checkpoint="${cp.name}"]`);
+                    if (checkpointElement) {
+                        // Update estimated time under checkpoint name
+                        const headerTime = checkpointElement.querySelector('.checkpoint-time');
+                        if (headerTime) {
+                            let headerText = `${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph)`;
+                            const checkpointObj = checkpoints.find(c => c.name === cp.name);
+                            if (checkpointObj && checkpointObj.time && checkpointObj.time.includes('Deadline')) {
+                                const deadline = checkpointObj.time.match(/Deadline[^)]+/);
+                                if (deadline) {
+                                    headerText += ` — ${deadline[0]}`;
+                                }
+                            }
+                            headerTime.textContent = headerText;
+                        }
+                        // Update time chart
+                        const goalTimesDiv = checkpointElement.querySelector('.goal-times');
+                        if (goalTimesDiv) {
+                            goalTimesDiv.innerHTML = getGoalTimes(cp.name, currentPace);
+                        }
+                    }
+                }
+            });
+        }
+
+        function formatTimer(milliseconds) {
+            const hours = Math.floor(milliseconds / (1000 * 60 * 60));
+            const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
+            const centiseconds = Math.floor((milliseconds % 1000) / 10);
+            
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${centiseconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimer() {
+            if (!raceStarted || !raceStartTime) return;
+            
+            const now = new Date();
+            const elapsed = now - raceStartTime;
+            document.getElementById('raceTimer').textContent = formatTimer(elapsed);
+        }
+
+        // Helper to determine if a checkpoint is a sleep card
+        function isSleepCard(checkpoint) {
+            return checkpoint.name && checkpoint.name.startsWith('Optional Sleep:');
+        }
+
+        // Get completed sleep cards from localStorage
+        function getCompletedSleepCards() {
+            return JSON.parse(localStorage.getItem('completedSleepCards') || '[]');
+        }
+        function setCompletedSleepCards(arr) {
+            localStorage.setItem('completedSleepCards', JSON.stringify(arr));
+        }
+
+        // Find the next actionable card (checkpoint or sleep card)
+        function getNextActionableIndex(checkpoints, completed, completedSleepCards) {
+            for (let i = 0; i < checkpoints.length; i++) {
+                const cp = checkpoints[i];
+                if (isSleepCard(cp)) {
+                    if (!completedSleepCards.includes(cp.name)) return i;
+                } else {
+                    if (!completed.find(c => c.name === cp.name)) return i;
+                }
+            }
+            return -1;
+        }
+
+        function calculateCurrentPace() {
+            if (!raceStarted) {
+                return 4.5;
+            }
+            
+            const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+            if (completed.length === 0) {
+                return 4.5;
+            }
+            
+            const lastCompleted = completed[completed.length - 1];
+            const completionTime = new Date(lastCompleted.completionTime);
+            const raceStart = new Date(RACE_START);
+            
+            // Ensure completion time is after race start
+            if (completionTime < raceStart) {
+                return 4.5;
+            }
+            
+            const elapsedMs = completionTime.getTime() - raceStart.getTime();
+            const elapsedTime = Math.max(1/3600, elapsedMs / (1000 * 60 * 60)); // Convert to hours, minimum 1 second
+            const pace = parseFloat(lastCompleted.mile) / elapsedTime;
+            return pace; // Removed 20 mph cap
+        }
+
+        function calculateEstimatedArrival(checkpointMile, currentPace) {
+            const hoursFromStart = checkpointMile / currentPace;
+            return new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
+        }
+
+        function createCheckpointElement(checkpoint, badgePace = 4.5, estimatedTime = null, completedCheckpoint = null, isNext = false) {
+            const div = document.createElement('div');
+            div.className = 'checkpoint';
+            div.setAttribute('data-checkpoint', checkpoint.name);
+            const isSleepCard = checkpoint.name && checkpoint.name.startsWith('Optional Sleep:');
+            const isFinishCard = checkpoint.isFinish;
+            const isStartCard = checkpoint.isStart;
+            
+            if (isStartCard) {
+                div.innerHTML = `
+                    <div class="checkpoint-header">
+                        <div class="checkpoint-name" style="margin-bottom: 10px;">Spring Lake</div>
+                        <div class="checkpoint-time">Friday, June 13, 2025 9:00 AM</div>
+                    </div>
+                    <div class="checkpoint-details">
+                        <div class="section">
+                            <div class="section-title">Tasks</div>
+                            <ul class="task-list">
+                                <li>Position yourself at: The Meadows Center, Spring Lake, San Marcos, TX</li>
+                                <li>Be at your boats ready to enter the water by 8:00 AM</li>
+                                <li>DO NOT ENTER THE LAKE UNTIL YOU ARE TOLD THAT IT'S OK TO DO SO</li>
+                                <li>Note: The TWS has special permission from Texas State University to start the race on Spring Lake and must follow strict rules</li>
+                            </ul>
+                        </div>
+                        <div class="map-buttons">
+                            <a class="google" href="${checkpoint.maps.google}" target="_blank">Open in Google Maps</a>
+                            <a class="apple" href="${checkpoint.maps.apple}" target="_blank">Open in Apple Maps</a>
+                        </div>
+                        <div class="checkpoint-controls">
+                            <button class="checkpoint-button complete-button" id="startRaceBtn" style="${raceStarted ? 'display:none;' : ''}">Start Race</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listener for Start Race button
+                const startBtn = div.querySelector('#startRaceBtn');
+                if (startBtn) {
+                    startBtn.addEventListener('click', () => {
+                        // Start the race
+                        raceStarted = true;
+                        raceStartTime = new Date();
+                        startRaceButton.disabled = true;
+                        resetRaceButton.disabled = false;
+                        
+                        // Enable all stop buttons
+                        document.querySelectorAll('.stop-button').forEach(button => {
+                            button.disabled = false;
+                        });
+
+                        // Start timer
+                        timerInterval = setInterval(updateTimer, 10);
+                        updateTimer();
+
+                        // Save race start to localStorage
+                        localStorage.setItem('raceStartTime', raceStartTime.toISOString());
+
+                        // Mark start checkpoint as completed
+                        const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+                        const startCheckpoint = {
+                            name: checkpoint.name,
+                            mile: checkpoint.mile,
+                            completionTime: raceStartTime.toISOString(),
+                            pace: 0 // Initial pace is 0 since we're at the start
+                        };
+                        completed.push(startCheckpoint);
+                        localStorage.setItem('completedCheckpoints', JSON.stringify(completed));
+                        
+                        // Move to next card
+                        setCurrentCardIndex(getCurrentCardIndex() + 1);
+                        renderCheckpoints();
+                    });
+                }
+                return div;
+            }
+            
+            // ... rest of existing function ...
+
+            // Get completed checkpoints to determine if this is the last completed one
+            const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+            const isLastCompleted = completed.length > 0 && completed[completed.length - 1].name === checkpoint.name;
+            
+            // Calculate current pace
+            const currentPace = calculateCurrentPace();
+            
+            // Format exchange items as a stacked, left-aligned list
+            const formattedExchange = [];
+            let hasWater = false, hasFood = false, hasLargeFood = false, hasSpiz = false;
+            checkpoint.exchange.forEach(item => {
+                if (item.includes('W')) hasWater = true;
+                if (item.includes('LF')) hasLargeFood = true;
+                else if (item.includes('F')) hasFood = true;
+                if (item.includes('MG Spiz')) hasSpiz = true;
+            });
+            if (hasWater) formattedExchange.push('1 water jug per paddler');
+            if (hasLargeFood) formattedExchange.push('1 large food pack per paddler');
+            if (hasFood) formattedExchange.push('1 food pack per paddler');
+            if (hasSpiz) formattedExchange.push('MG Spiz');
+
+            // Create task list based on checkpoint data
+            const tasks = [
+                `Position yourself at: ${checkpoint.position}`,
+                `Prepare exchange items: ${formattedExchange.join(', ')}`,
+                `Plan for ${checkpoint.napTime} nap time`,
+                checkpoint.time.includes('Deadline') ? `Note: ${checkpoint.time.split('(')[1].replace(')', '')}` : null
+            ].filter(Boolean);
+
+            // Calculate estimated time for this checkpoint
+            let displayTime = '--';
+            if (completedCheckpoint) {
+                const completionTime = new Date(completedCheckpoint.completionTime);
+                displayTime = `Arrived: ${formatDate(completionTime)} ${formatTime(completionTime)} (${completedCheckpoint.pace ? completedCheckpoint.pace.toFixed(1) : '—'} mph)`;
+            } else {
+                const cp = checkpointGoals[checkpoint.name];
+                if (cp) {
+                    const hoursFromStart = cp.mile / currentPace;
+                    const arrival = new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
+                    displayTime = `Est. Arrival: ${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph)`;
+                    if (checkpoint.time && checkpoint.time.includes('Deadline')) {
+                        const deadline = checkpoint.time.match(/Deadline[^)]+/);
+                        if (deadline) {
+                            displayTime += ` — ${deadline[0]}`;
+                        }
+                    }
+                }
+            }
+
+            if (isSleepCard) {
+                // Get the next checkpoint for map links
+                const nextCheckpointIndex = checkpoints.findIndex(cp => cp.name === checkpoint.name) + 1;
+                const nextCheckpoint = nextCheckpointIndex < checkpoints.length ? checkpoints[nextCheckpointIndex] : null;
+                
+                // Calculate current pace
+                const currentPace = calculateCurrentPace();
+                const hoursToFinish = 260 / currentPace; // Total race distance / current pace
+                
+                div.innerHTML = `
+                    <div class="checkpoint-header">
+                        <div class="checkpoint-name" style="margin-bottom: 10px;">${checkpoint.name.replace('Optional Sleep:', 'Sleep')}</div>
+                        <div class="checkpoint-time">Current Pace: ${currentPace.toFixed(1)} mph</div>
+                    </div>
+                    <div class="checkpoint-details">
+                        <div class="section">
+                            <div class="section-title">Sleep</div>
+                            <ul class="task-list">
+                                <li>${checkpoint.napTime ? `Planned nap: ${checkpoint.napTime}` : ''}</li>
+                                <li>${checkpoint.position}</li>
+                            </ul>
+                        </div>
+                        ${nextCheckpoint ? `
+                            <div class="section">
+                                <div class="section-title">Upcoming</div>
+                                <ul class="task-list">
+                                    <li>${nextCheckpoint.name} (Mile ${nextCheckpoint.mile})</li>
+                                    <li>${nextCheckpoint.position}</li>
+                                </ul>
+                            </div>
+                            <div class="map-buttons">
+                                <a class="google" href="${nextCheckpoint.maps.google}" target="_blank">Open Next in Google Maps</a>
+                                <a class="apple" href="${nextCheckpoint.maps.apple}" target="_blank">Open Next in Apple Maps</a>
+                            </div>
+                        ` : ''}
+                        <div class="checkpoint-controls">
+                            <button class="checkpoint-button complete-button" id="continueSleepBtn" style="width:100%;font-size:1.18em;padding:18px 0;border-radius:20px;font-weight:800;box-shadow:0 2px 8px 0 rgba(0,0,0,0.10);background:var(--suunto-orange);color:var(--suunto-white);border:2px solid var(--suunto-orange);cursor:pointer;">Continue</button>
+                        </div>
+                    </div>
+                `;
+                // Add event listener for Continue button
+                const continueBtn = div.querySelector('#continueSleepBtn');
+                if (continueBtn) {
+                    continueBtn.disabled = !raceStarted;
+                    if (!raceStarted) continueBtn.style.opacity = 0.5;
+                    continueBtn.addEventListener('click', () => {
+                        if (!raceStarted) return;
+                        setCurrentCardIndex(getCurrentCardIndex() + 1);
+                        renderCheckpoints();
+                    });
+                }
+                return div;
+            }
+
+            if (isFinishCard) {
+                // Check if race is finished
+                const finished = localStorage.getItem('raceFinished');
+                let finishTime = localStorage.getItem('raceFinishTime');
+                let displayTime = '--';
+                if (finished && finishTime) {
+                    // Format the finish time to match other checkpoint cards
+                    const finishDate = new Date(RACE_START.getTime() + (parseInt(finishTime.split(':')[0]) * 60 * 60 * 1000) + 
+                                             (parseInt(finishTime.split(':')[1]) * 60 * 1000) + 
+                                             (parseInt(finishTime.split(':')[2]) * 1000));
+                    displayTime = `Finished ${formatDate(finishDate)} ${formatTime(finishDate)} (${finishTime})`;
+                } else {
+                    // Get the last completed checkpoint to calculate current pace
+                    const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+                    const lastCompleted = completed[completed.length - 1];
+                    let currentPace = 4.5; // Default pace
+                    
+                    if (lastCompleted && lastCompleted.completionTime) {
+                        const elapsedTime = (new Date(lastCompleted.completionTime) - RACE_START) / (1000 * 60 * 60); // hours
+                        currentPace = parseFloat(lastCompleted.mile) / elapsedTime; // Removed 20 mph cap
+                    }
+                    
+                    // Calculate estimated arrival based on total race distance
+                    const hoursFromStart = 260 / currentPace; // Total race distance / current pace
+                    const arrival = new Date(RACE_START.getTime() + hoursFromStart * 60 * 60 * 1000);
+                    displayTime = `${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph) — Deadline 1:00 PM Tuesday`;
+                }
+                div.innerHTML = `
+                    <div class="checkpoint-header">
+                        <div class="checkpoint-name" style="margin-bottom: 10px;">Seadrift</div>
+                        <div class="checkpoint-time">${displayTime}</div>
+                    </div>
+                    <div class="checkpoint-details">
+                        ${finished ? `
+                            <div class="section">
+                                <div class="section-title">Congratulations!</div>
+                                <ul class="task-list">
+                                    <li>You've completed the Texas Water Safari!</li>
+                                    <li>Get your finisher's medal</li>
+                                    <li>Take team photos</li>
+                                </ul>
+                            </div>
+                            <div class="map-buttons">
+                                <a class="google" href="https://maps.google.com/?q=Bill+Sander+Memorial+Park+Seadrift+1522+Swan+Point+Rd+Seadrift+TX+77983" target="_blank">Open in Google Maps</a>
+                                <a class="apple" href="https://maps.apple.com/?q=Bill+Sander+Memorial+Park+Seadrift+1522+Swan+Point+Rd+Seadrift+TX+77983" target="_blank">Open in Apple Maps</a>
+                            </div>
+                            <div class="checkpoint-controls">
+                                <button class="checkpoint-button complete-button" onclick="shareRaceResults()">Share Results</button>
+                            </div>
+                        ` : `
+                            <div class="section">
+                                <div class="section-title">Tasks</div>
+                                <ul class="task-list">
+                                    <li>Position yourself at: Bill Sander Memorial Park – Seadrift</li>
+                                    <li>1522 Swan Point Rd, Seadrift, TX 77983</li>
+                                    <li>Note: Deadline 1:00 PM Tuesday</li>
+                                </ul>
+                            </div>
+                            <div class="map-buttons">
+                                <a class="google" href="https://maps.google.com/?q=Bill+Sander+Memorial+Park+Seadrift+1522+Swan+Point+Rd+Seadrift+TX+77983" target="_blank">Open in Google Maps</a>
+                                <a class="apple" href="https://maps.apple.com/?q=Bill+Sander+Memorial+Park+Seadrift+1522+Swan+Point+Rd+Seadrift+TX+77983" target="_blank">Open in Apple Maps</a>
+                            </div>
+                        `}
+                        <div class="finish-controls" style="${isNext && !finished ? '' : 'display:none;'}">
+                            <button class="checkpoint-button complete-button">Finish Race</button>
+                        </div>
+                    </div>
+                `;
+                const finishBtn = div.querySelector('.checkpoint-button');
+                if (finishBtn) {
+                    finishBtn.addEventListener('click', () => {
+                        // Stop the race
+                        raceStarted = false;
+                        if (timerInterval) {
+                            clearInterval(timerInterval);
+                            timerInterval = null;
+                        }
+                        // Get elapsed time
+                        const now = new Date();
+                        let elapsed = 0;
+                        if (raceStartTime) {
+                            elapsed = now - raceStartTime;
+                        } else if (localStorage.getItem('raceStartTime')) {
+                            elapsed = now - new Date(localStorage.getItem('raceStartTime'));
+                        }
+                        const finalTime = formatTimer(elapsed);
+                        // Hide finish button
+                        finishBtn.style.display = 'none';
+                        // Save finish state
+                        localStorage.setItem('raceFinished', 'true');
+                        localStorage.setItem('raceFinishTime', finalTime);
+                        // Update main timer
+                        document.getElementById('raceTimer').textContent = finalTime;
+                        // Update timeline
+                        renderTimeline();
+                        // Update checkpoint display
+                        renderCheckpoints();
+                    });
+                }
+                return div;
+            }
+
+            div.innerHTML = `
+                <div class="checkpoint-header">
+                    <div class="checkpoint-name">${checkpoint.name}</div>
+                    <div class="checkpoint-time">${displayTime}</div>
+                </div>
+                <div class="checkpoint-details">
+                    <div class="section">
+                        <div class="section-title">Pace</div>
+                        <ul class="exchange-list">
+                            <li><span style="color:var(--suunto-white);font-weight:700;">${currentPace.toFixed(1)} mph</span><span style="color:var(--suunto-gray);font-weight:400;"> &nbsp;|&nbsp; </span><span style="color:var(--suunto-white);font-weight:700;">${Math.round(260 / currentPace)}h</span></li>
+                        </ul>
+                    </div>
+                    <div class="section">
+                        <div class="section-title">Tasks</div>
+                        <ul class="task-list">
+                            ${tasks.map(task => `<li>${task}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="section">
+                        <div class="section-title">Exchange</div>
+                        <ul class="exchange-list">
+                            ${formattedExchange.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="map-buttons">
+                        <a class="google" href="${checkpoint.maps.google}" target="_blank">Open in Google Maps</a>
+                        <a class="apple" href="${checkpoint.maps.apple}" target="_blank">Open in Apple Maps</a>
+                    </div>
+                    <div class="checkpoint-controls">
+                        <button class="checkpoint-button complete-button" style="${isNext ? '' : 'display:none;'}">Check In</button>
+                        <button class="checkpoint-button reset-button" style="display:none;">Reset</button>
+                    </div>
+                </div>
+            `;
+
+            // Add click handlers
+            const completeButton = div.querySelector('.complete-button');
+            const resetButton = div.querySelector('.reset-button');
+            const paceInfo = div.querySelector('.pace-info');
+
+            // Show correct button on load
+            if (completedCheckpoint) {
+                div.classList.add('completed');
+                completeButton.style.display = 'none';
+                // Only show reset button if this is the last completed checkpoint
+                const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+                const lastCompleted = completed[completed.length - 1];
+                if (lastCompleted && lastCompleted.name === checkpoint.name) {
+                    resetButton.style.display = 'inline-block';
+                    resetButton.addEventListener('click', () => {
+                        // Show confirmation modal
+                        const modal = document.getElementById('checkpointResetModal');
+                        modal.style.display = 'flex';
+                        
+                        // Handle confirmation
+                        const confirmBtn = document.getElementById('confirmCheckpointReset');
+                        const cancelBtn = document.getElementById('cancelCheckpointReset');
+                        
+                        const handleConfirm = () => {
+                            // Remove the last completed checkpoint
+                            completed.pop();
+                            localStorage.setItem('completedCheckpoints', JSON.stringify(completed));
+                            
+                            // Remove completed class and show check-in button
+                            div.classList.remove('completed');
+                            completeButton.style.display = 'inline-block';
+                            resetButton.style.display = 'none';
+                            
+                            // Update the time display back to estimated arrival
+                            const cp = checkpointGoals[checkpoint.name];
+                            if (cp) {
+                                const hoursFromStart = cp.mile / currentPace;
+                                const arrival = new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
+                                const timeDisplay = div.querySelector('.checkpoint-time');
+                                if (timeDisplay) {
+                                    let displayTime = `Est. Arrival: ${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph)`;
+                                    if (checkpoint.time && checkpoint.time.includes('Deadline')) {
+                                        const deadline = checkpoint.time.match(/Deadline[^)]+/);
+                                        if (deadline) {
+                                            displayTime += ` — ${deadline[0]}`;
+                                        }
+                                    }
+                                    timeDisplay.textContent = displayTime;
+                                }
+                            }
+                            
+                            // Move back to this card
+                            setCurrentCardIndex(checkpoints.findIndex(cp => cp.name === checkpoint.name));
+                            renderCheckpoints();
+                            
+                            // Hide modals and remove event listeners
+                            modal.style.display = 'none';
+                            document.getElementById('timelineModal').style.display = 'none';
+                            confirmBtn.removeEventListener('click', handleConfirm);
+                            cancelBtn.removeEventListener('click', handleCancel);
+                        };
+                        
+                        const handleCancel = () => {
+                            modal.style.display = 'none';
+                            confirmBtn.removeEventListener('click', handleConfirm);
+                            cancelBtn.removeEventListener('click', handleCancel);
+                        };
+                        
+                        confirmBtn.addEventListener('click', handleConfirm);
+                        cancelBtn.addEventListener('click', handleCancel);
+                        
+                        // Close modal when clicking outside
+                        modal.addEventListener('click', (e) => {
+                            if (e.target === modal) {
+                                handleCancel();
+                            }
+                        });
+                    });
+                } else {
+                    resetButton.style.display = 'none';
+                }
+            } else {
+                resetButton.style.display = 'none';
+            }
+
+            resetButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Only allow reset if this is the last completed checkpoint
+                const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+                const lastCompleted = completed[completed.length - 1];
+                if (!lastCompleted || lastCompleted.name !== checkpoint.name) return;
+
+                // Remove from localStorage
+                const index = completed.findIndex(cp => cp.name === checkpoint.name);
+                if (index !== -1) {
+                    completed.splice(index, 1);
+                    localStorage.setItem('completedCheckpoints', JSON.stringify(completed));
+                }
+
+                // Update estimated times
+                const newLastCompletedRegular = getLastCompletedRegular(completed);
+                updateEstimatedTimes(newLastCompletedRegular);
+
+                // Re-render all checkpoints
+                renderCheckpoints();
+            });
+
+            completeButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!raceStarted) return;
+                // Save completion to localStorage for stats
+                const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+                const now = new Date();
+                // Ensure completion time is after race start
+                const completionTime = now < RACE_START ? new Date(RACE_START.getTime() + 1000) : now;
+                const elapsedTime = Math.max(1/3600, (completionTime - RACE_START) / (1000 * 60 * 60)); // hours, minimum 1 second
+                const pace = Math.min(20, parseFloat(checkpoint.mile) / elapsedTime); // Cap at 20 mph
+                const checkpointData = {
+                    name: checkpoint.name,
+                    mile: checkpoint.mile,
+                    completionTime: completionTime.toISOString(),
+                    pace: pace
+                };
+                completed.push(checkpointData);
+                localStorage.setItem('completedCheckpoints', JSON.stringify(completed));
+                setCurrentCardIndex(getCurrentCardIndex() + 1);
+                renderCheckpoints();
+            });
+
+            return div;
+        }
+
+        function renderCheckpoints() {
+            const checkpointsContainer = document.getElementById('checkpoints');
+            checkpointsContainer.innerHTML = '';
+            const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+            const currentPace = calculateCurrentPace();
+            let currentCardIndex = getCurrentCardIndex();
+            // Clamp to last card if out of bounds
+            if (currentCardIndex >= checkpoints.length) currentCardIndex = checkpoints.length - 1;
+            if (currentCardIndex < 0) currentCardIndex = 0;
+            const checkpoint = checkpoints[currentCardIndex];
+            let completedCheckpoint = completed.find(cp => cp.name === checkpoint.name);
+            // Only render the current card
+            const isNextActionable = true;
+            const element = createCheckpointElement(checkpoint, currentPace, null, completedCheckpoint, isNextActionable);
+            checkpointsContainer.appendChild(element);
+            renderTimeline();
+        }
+
+        // Initialize race controls
+        const startRaceButton = document.getElementById('startRace');
+        const resetRaceButton = document.getElementById('resetRace');
+        const resetModal = document.getElementById('resetConfirmModal');
+        const confirmResetButton = document.getElementById('confirmReset');
+        const cancelResetButton = document.getElementById('cancelReset');
+
+        startRaceButton.addEventListener('click', () => {
+            // Start the race
+            raceStarted = true;
+            raceStartTime = new Date();
+            startRaceButton.disabled = true;
+            resetRaceButton.disabled = false;
+            
+            // Enable all stop buttons
+            document.querySelectorAll('.stop-button').forEach(button => {
+                button.disabled = false;
+            });
+
+            // Start timer
+            timerInterval = setInterval(updateTimer, 10);
+            updateTimer();
+
+            // Save race start to localStorage
+            localStorage.setItem('raceStartTime', raceStartTime.toISOString());
+
+            // Mark start checkpoint as completed
+            const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+            const startCheckpoint = {
+                name: checkpoints[0].name,
+                mile: checkpoints[0].mile,
+                completionTime: raceStartTime.toISOString(),
+                pace: 0 // Initial pace is 0 since we're at the start
+            };
+            completed.push(startCheckpoint);
+            localStorage.setItem('completedCheckpoints', JSON.stringify(completed));
+            
+            // Move to next card
+            setCurrentCardIndex(getCurrentCardIndex() + 1);
+            renderCheckpoints();
+        });
+
+        resetRaceButton.addEventListener('click', () => {
+            resetModal.style.display = 'flex';
+        });
+
+        confirmResetButton.addEventListener('click', () => {
+            raceStarted = false;
+            raceStartTime = null;
+            startRaceButton.disabled = false;
+            resetRaceButton.disabled = true;
+            // Stop timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            document.getElementById('raceTimer').textContent = '00:00:00:00';
+            // Disable all stop buttons
+            document.querySelectorAll('.stop-button').forEach(button => {
+                button.disabled = true;
+            });
+            // Clear all progress
+            localStorage.removeItem('raceStartTime');
+            localStorage.removeItem('raceFinished');
+            localStorage.removeItem('raceFinishTime');
+            localStorage.removeItem('completedCheckpoints');
+            localStorage.removeItem('completedSleepCards');
+            localStorage.removeItem('currentCardIndex');
+            // Reset to initial state
+            setCurrentCardIndex(0);
+            // Hide modal
+            resetModal.style.display = 'none';
+            // Re-render everything
+            renderCheckpoints();
+            renderTimeline();
+        });
+
+        cancelResetButton.addEventListener('click', () => {
+            resetModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        resetModal.addEventListener('click', (e) => {
+            if (e.target === resetModal) {
+                resetModal.style.display = 'none';
+            }
+        });
+
+        // Initialize checkpoints
+        const checkpointsContainer = document.getElementById('checkpoints');
+        const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+        const savedRaceStart = localStorage.getItem('raceStartTime');
+        const savedRaceFinished = localStorage.getItem('raceFinished');
+        const savedRaceFinishTime = localStorage.getItem('raceFinishTime');
+        if (savedRaceStart) {
+            raceStarted = true;
+            raceStartTime = new Date(savedRaceStart);
+            startRaceButton.disabled = true;
+            resetRaceButton.disabled = false;
+            if (savedRaceFinished && savedRaceFinishTime) {
+                document.getElementById('raceTimer').textContent = savedRaceFinishTime;
+            } else {
+                // Start timer
+                timerInterval = setInterval(updateTimer, 10);
+                updateTimer();
+            }
+        } else {
+            raceStarted = false;
+            raceStartTime = null;
+            startRaceButton.disabled = false;
+            resetRaceButton.disabled = true;
+        }
+        renderCheckpoints();
+
+        // Add a function to sum all sleep durations and update estimated times
+        function getTotalSleepMinutes() {
+            const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+            return completed.reduce((sum, cp) => sum + (cp.sleepDuration ? cp.sleepDuration : 0), 0);
+        }
+        function updateEstimatedTimesWithSleep() {
+            const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+            const lastCheckpoint = completed[completed.length - 1];
+            if (!lastCheckpoint) return;
+            const currentPace = calculateCurrentPace();
+            const totalSleepMinutes = getTotalSleepMinutes();
+            const remainingCheckpoints = checkpoints.filter(cp => 
+                parseFloat(cp.mile) > parseFloat(lastCheckpoint.mile)
+            );
+            remainingCheckpoints.forEach(cp => {
+                const estimatedTime = estimateNextTime(
+                    parseFloat(lastCheckpoint.mile),
+                    parseFloat(cp.mile),
+                    new Date(lastCheckpoint.completionTime),
+                    currentPace
+                );
+                // Add total sleep time to estimated arrival
+                const arrivalWithSleep = new Date(estimatedTime.getTime() + totalSleepMinutes * 60000);
+                const checkpointElement = document.querySelector(`[data-checkpoint="${cp.name}"]`);
+                if (checkpointElement) {
+                    // Update estimated time under checkpoint name
+                    const headerTime = checkpointElement.querySelector('.checkpoint-time');
+                    if (headerTime) {
+                        const cpGoal = checkpointGoals[cp.name];
+                        if (cpGoal) {
+                            const hoursFromStart = cpGoal.mile / currentPace;
+                            const raceStart = new Date('2025-06-13T09:00:00');
+                            const arrival = new Date(raceStart.getTime() + hoursFromStart * 60 * 60 * 1000 + totalSleepMinutes * 60000);
+                            let headerText = `${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph)`;
+                            const checkpointObj = checkpoints.find(c => c.name === cp.name);
+                            if (checkpointObj && checkpointObj.time && checkpointObj.time.includes('Deadline')) {
+                                const deadline = checkpointObj.time.match(/Deadline[^)]+/);
+                                if (deadline) {
+                                    headerText += ` — ${deadline[0]}`;
+                                }
+                            }
+                            headerTime.textContent = headerText;
+                        }
+                    }
+                    // Update badge
+                    const goalTimesDiv = checkpointElement.querySelector('.goal-times');
+                    if (goalTimesDiv) {
+                        goalTimesDiv.innerHTML = getGoalTimes(cp.name, currentPace);
+                    }
+                }
+            });
+        }
+
+        // --- Tinder-style single-card flow ---
+        function getCurrentCardIndex() {
+            return parseInt(localStorage.getItem('currentCardIndex') || '0', 10);
+        }
+        function setCurrentCardIndex(idx) {
+            localStorage.setItem('currentCardIndex', idx);
+        }
+        function resetProgress() {
+            localStorage.setItem('currentCardIndex', 0);
+            localStorage.removeItem('completedCheckpoints');
+            localStorage.removeItem('raceFinished');
+            localStorage.removeItem('raceFinishTime');
+        }
+
+        function renderTimeline() {
+            const timeline = document.getElementById('timeline');
+            if (!timeline) return;
+            const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+            const currentCardIndex = getCurrentCardIndex();
+            const finished = localStorage.getItem('raceFinished');
+            const finishTime = localStorage.getItem('raceFinishTime');
+            // Only regular checkpoints (not sleep cards)
+            const regularCheckpoints = checkpoints.filter(cp => !isSleepCard(cp));
+            let html = '<div class="timeline-outer">';
+            html += '<ul class="timeline-list">';
+            regularCheckpoints.forEach((cp, idx) => {
+                const completedCp = completed.find(c => c.name === cp.name);
+                const isCurrent = checkpoints.findIndex(c => c.name === cp.name) === currentCardIndex;
+                const isFinish = cp.isFinish;
+                const isCompleted = completedCp || (isFinish && finished);
+                const classes = ['timeline-item'];
+                if (isCompleted) {
+                    classes.push('checked-in');
+                } else if (isCurrent) {
+                    classes.push('current');
+                }
+                html += `<li class="${classes.join(' ')}" data-checkpoint-index="${checkpoints.findIndex(c => c.name === cp.name)}">`;
+                html += `<span class="timeline-dot"></span>`;
+                html += `<span class="timeline-label">${isFinish ? 'Seadrift' : (cp.name === 'Race Start' ? 'Spring Lake' : cp.name)}</span>`;
+                html += `<span class="timeline-time">`;
+                if (cp.name === 'Race Start') {
+                    const startDate = new Date(RACE_START);
+                    html += `${formatDate(startDate)} ${formatTime(startDate)}`;
+                } else if (isFinish && finished && finishTime) {
+                    const finishDate = new Date(RACE_START.getTime() + (parseInt(finishTime.split(':')[0]) * 60 * 60 * 1000) + 
+                                             (parseInt(finishTime.split(':')[1]) * 60 * 1000) + 
+                                             (parseInt(finishTime.split(':')[2]) * 1000));
+                    html += `${formatDate(finishDate)} ${formatTime(finishDate)}`;
+                } else if (completedCp && completedCp.completionTime) {
+                    const d = new Date(completedCp.completionTime);
+                    html += `${formatDate(d)} ${formatTime(d)}`;
+                } else {
+                    html += '—';
+                }
+                html += `</span>`;
+                html += `</li>`;
+            });
+            html += '</ul></div>';
+            timeline.innerHTML = html;
+
+            // Add click handlers for timeline items
+            const timelineItems = timeline.querySelectorAll('.timeline-item');
+            timelineItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const checkpointIndex = parseInt(item.getAttribute('data-checkpoint-index'));
+                    const checkpoint = checkpoints[checkpointIndex];
+                    const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+                    const completedCheckpoint = completed.find(cp => cp.name === checkpoint.name);
+                    const currentPace = calculateCurrentPace();
+                    
+                    // Create checkpoint element for modal
+                    const modalCheckpoint = document.getElementById('modalCheckpoint');
+                    const element = createCheckpointElement(checkpoint, currentPace, null, completedCheckpoint, false);
+                    modalCheckpoint.innerHTML = '';
+                    modalCheckpoint.appendChild(element);
+
+                    // Hide checkpoint-controls if all buttons are hidden
+                    const controls = element.querySelector('.checkpoint-controls');
+                    if (controls) {
+                        const buttons = controls.querySelectorAll('.checkpoint-button');
+                        const allHidden = Array.from(buttons).every(button => button.style.display === 'none');
+                        if (allHidden) {
+                            controls.style.display = 'none';
+                        }
+                    }
+                    
+                    // Show modal
+                    const modal = document.getElementById('timelineModal');
+                    modal.style.display = 'flex';
+                });
+            });
+        }
+
+        // Add click handler to close modal when clicking outside
+        const timelineModal = document.getElementById('timelineModal');
+        timelineModal.addEventListener('click', (e) => {
+            if (e.target === timelineModal) {
+                timelineModal.style.display = 'none';
+            }
+        });
+
+        // Add styles for timeline items
+        const style = document.createElement('style');
+        style.textContent = `
+            .timeline-item {
+                cursor: pointer;
+                transition: opacity 0.15s;
+            }
+            .timeline-item:hover {
+                opacity: 0.8;
+            }
+            #timelineModal .modal-content {
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add share function
+        function shareRaceResults() {
+            const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+            const finishTime = localStorage.getItem('raceFinishTime');
+            const raceStart = new Date(RACE_START);
+            
+            let emailBody = 'Texas Water Safari 2025 Race Results\n\n';
+            emailBody += 'Checkpoint Times:\n';
+            
+            // Sort checkpoints by mile to ensure correct order
+            completed.sort((a, b) => parseFloat(a.mile) - parseFloat(b.mile));
+            
+            completed.forEach(cp => {
+                const d = new Date(cp.completionTime);
+                // Ensure the date is valid and after race start
+                if (d < raceStart) {
+                    d.setTime(raceStart.getTime());
+                }
+                emailBody += `${cp.name} (Mile ${cp.mile}): ${formatDate(d)} ${formatTime(d)}\n`;
+            });
+            
+            if (finishTime) {
+                emailBody += `\nTotal Race Time: ${finishTime}\n`;
+                
+                // Calculate average pace
+                const [hours, minutes, seconds] = finishTime.split(':').map(Number);
+                const totalHours = hours + (minutes / 60) + (seconds / 3600);
+                const averagePace = (260 / totalHours).toFixed(1);
+                emailBody += `Average Pace: ${averagePace} mph\n`;
+            }
+            
+            const subject = 'Texas Water Safari 2025 - Race Results';
+            const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+            window.location.href = mailtoLink;
+        }
+    </script>
+    <div style="height: 60px;"></div>
+</body>
+</html>

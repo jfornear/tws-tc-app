@@ -1,0 +1,25 @@
+{
+    "name": "Texas Water Safari 2025",
+    "short_name": "TWS 2025",
+    "description": "Team Captain's Checkpoint Guide for Texas Water Safari 2025",
+    "start_url": "captains-checklist.html",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#181A1B",
+    "theme_color": "#FF4B00",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+} 
