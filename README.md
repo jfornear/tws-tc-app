@@ -1,4 +1,4 @@
-# Texas Water Safari Captain's Checklist
+# Texas Water Safari Team Captain App
 
 A web application to help team captains track checkpoints and manage race logistics during the Texas Water Safari canoe race.
 
