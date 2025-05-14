@@ -22,7 +22,7 @@ Try the app: [Texas Water Safari Team Captain App](https://jfornear.s3.us-west-2
 
 ## Screenshot
 
-![App Screenshot](app-screenshot.png?1)
+![App Screenshot](app-screenshot.png?2)
 
 ## Getting Started
 
