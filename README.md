@@ -18,7 +18,7 @@ Jesse Fornear ([@jfornear](https://x.com/jfornear))
 
 ## Demo
 
-Try the app: [Texas Water Safari Captain's Checklist](https://jfornear.s3.us-west-2.amazonaws.com/tws/captains-checklist.html?1)
+Try the app: [Texas Water Safari Team Captain App](https://jfornear.s3.us-west-2.amazonaws.com/tws/captains-checklist.html?1)
 
 ## Screenshot
 
