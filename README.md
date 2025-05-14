@@ -18,7 +18,7 @@ Jesse Fornear ([@jfornear](https://x.com/jfornear))
 
 ## Screenshot
 
-![App Screenshot](app-screenshot.png)
+![App Screenshot](app-screenshot.png?1)
 
 ## Getting Started
 
