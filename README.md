@@ -28,7 +28,6 @@ Try the app: [Texas Water Safari Captain's Checklist](https://jfornear.s3.us-wes
 
 1. Clone the repository
 2. Open `captains-checklist.html` in a web browser
-3. For development, you can use any local server (e.g., `python -m http.server`)
 
 ## Development
 
@@ -56,4 +55,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Acknowledgments
 
 - Texas Water Safari organizers and volunteers
-- All the paddlers who have participated in the race 
+- All the paddlers who have participated in the race
