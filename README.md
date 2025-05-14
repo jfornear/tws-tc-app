@@ -1,6 +1,6 @@
 # Texas Water Safari Team Captain App
 
-A web application to help team captains track checkpoints and manage race logistics during the Texas Water Safari canoe race.
+A Progressive Web App (PWA) designed specifically for Texas Water Safari team captains to track their team's progress during the 260-mile canoe race. Features real-time race timing, checkpoint management, and estimated arrival times to help teams navigate the challenging course from San Marcos to Seadrift.
 
 ## Author
 
