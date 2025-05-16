@@ -250,16 +250,15 @@
         }
         [contenteditable="true"] {
             outline: none;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            padding: 4px;
-            transition: border-color 0.2s;
+            border: none;
+            padding: 4px 0;
+            margin: 0;
         }
         [contenteditable="true"]:focus {
-            border-color: var(--suunto-blue);
+            outline: none;
         }
         [contenteditable="true"]:hover {
-            border-color: var(--suunto-gray);
+            outline: none;
         }
         .task-list li, .exchange-list li, .pace-info p, .sleep-info p {
             margin: 3px 0;
@@ -268,6 +267,7 @@
             white-space: normal;
             color: var(--suunto-white);
             line-height: 1.4;
+            padding-left: 0;
         }
         .exchange-list li .icon {
             font-size: 1.1em;
