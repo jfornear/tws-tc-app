@@ -15,6 +15,11 @@ Jesse Fornear ([@jfornear](https://x.com/jfornear))
 - Mobile-first design
 - Offline support via PWA
 - Share race results via email
+- Editable checkpoint notes and tasks
+  - Customize tasks and exchange items for each checkpoint
+  - Edit sleep and upcoming checkpoint information
+  - Personalize finish line congratulations message
+  - All changes save automatically to local storage
 
 ## Demo
 
@@ -39,6 +44,32 @@ The application is built with vanilla HTML, CSS, and JavaScript. No build proces
 - `manifest.json` - PWA manifest
 - `sw.js` - Service worker for offline support
 - `icons/` - Application icons
+
+### Customizing Checkpoint Information
+
+The app allows team captains to customize various sections of each checkpoint:
+
+1. **Tasks Section**
+   - Edit the default tasks for each checkpoint
+   - Add or remove items as needed
+   - Changes save automatically
+
+2. **Exchange Section**
+   - Modify the exchange items list
+   - Add notes about specific requirements
+   - Update quantities or special instructions
+
+3. **Sleep Cards**
+   - Customize sleep location details
+   - Add notes about rest area conditions
+   - Update upcoming checkpoint information
+
+4. **Finish Line**
+   - Personalize the congratulations message
+   - Add team-specific instructions
+   - Include post-race requirements
+
+All changes are automatically saved to your browser's local storage and will persist between sessions. The editable sections are marked with a subtle border when you hover over them.
 
 ### Contributing
 

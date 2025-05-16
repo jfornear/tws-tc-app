@@ -248,6 +248,19 @@
             font-size: 1.08em;
             line-height: 1.4;
         }
+        [contenteditable="true"] {
+            outline: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            padding: 4px;
+            transition: border-color 0.2s;
+        }
+        [contenteditable="true"]:focus {
+            border-color: var(--suunto-blue);
+        }
+        [contenteditable="true"]:hover {
+            border-color: var(--suunto-gray);
+        }
         .task-list li, .exchange-list li, .pace-info p, .sleep-info p {
             margin: 3px 0;
             font-size: 1.08em;
@@ -1185,6 +1198,49 @@
             return new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
         }
 
+        // Add robust storage management functions
+        function saveToLocalStorage(element) {
+            try {
+                const key = element.getAttribute('data-storage-key');
+                if (!key) return;
+                
+                const content = element.innerHTML;
+                // Check if content is valid HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = content;
+                
+                // Only save if the content is valid
+                if (tempDiv.innerHTML === content) {
+                    localStorage.setItem(key, content);
+                }
+            } catch (error) {
+                console.error('Error saving to localStorage:', error);
+                // Optionally show a user-friendly error message
+            }
+        }
+
+        function loadFromLocalStorage(element) {
+            try {
+                const key = element.getAttribute('data-storage-key');
+                if (!key) return;
+                
+                const savedContent = localStorage.getItem(key);
+                if (savedContent) {
+                    // Validate the saved content before using it
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = savedContent;
+                    
+                    // Only use the content if it's valid HTML
+                    if (tempDiv.innerHTML === savedContent) {
+                        element.innerHTML = savedContent;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading from localStorage:', error);
+                // Optionally show a user-friendly error message
+            }
+        }
+
         function createCheckpointElement(checkpoint, badgePace = 4.5, estimatedTime = null, completedCheckpoint = null, isNext = false) {
             const div = document.createElement('div');
             div.className = 'checkpoint';
@@ -1193,6 +1249,46 @@
             const isFinishCard = checkpoint.isFinish;
             const isStartCard = checkpoint.isStart;
             
+            // Store event listeners for cleanup
+            const eventListeners = [];
+            
+            // Add event listeners for editable elements after setting innerHTML
+            const setupEditableContent = () => {
+                div.querySelectorAll('[contenteditable="true"]').forEach(element => {
+                    // Load saved content
+                    loadFromLocalStorage(element);
+
+                    // Save on blur
+                    const blurHandler = () => {
+                        saveToLocalStorage(element);
+                    };
+                    element.addEventListener('blur', blurHandler);
+                    eventListeners.push({ element, type: 'blur', handler: blurHandler });
+
+                    // Save on input (with debounce)
+                    let timeout;
+                    const inputHandler = () => {
+                        clearTimeout(timeout);
+                        timeout = setTimeout(() => {
+                            saveToLocalStorage(element);
+                        }, 500);
+                    };
+                    element.addEventListener('input', inputHandler);
+                    eventListeners.push({ element, type: 'input', handler: inputHandler });
+                });
+            };
+
+            // Cleanup function to remove event listeners
+            const cleanup = () => {
+                eventListeners.forEach(({ element, type, handler }) => {
+                    element.removeEventListener(type, handler);
+                });
+                eventListeners.length = 0;
+            };
+
+            // Add cleanup to the div for later use
+            div.cleanup = cleanup;
+
             if (isStartCard) {
                 div.innerHTML = `
                     <div class="checkpoint-header">
@@ -1202,7 +1298,7 @@
                     <div class="checkpoint-details">
                         <div class="section">
                             <div class="section-title">Tasks</div>
-                            <ul class="task-list">
+                            <ul class="task-list" contenteditable="true" data-storage-key="tasks">
                                 <li>Position yourself at: The Meadows Center, Spring Lake, San Marcos, TX</li>
                                 <li>Be at your boats ready to enter the water by 8:00 AM</li>
                                 <li>DO NOT ENTER THE LAKE UNTIL YOU ARE TOLD THAT IT'S OK TO DO SO</li>
@@ -1218,6 +1314,7 @@
                         </div>
                     </div>
                 `;
+                setupEditableContent();
                 
                 // Add event listener for Start Race button
                 const startBtn = div.querySelector('#startRaceBtn');
@@ -1328,7 +1425,7 @@
                     <div class="checkpoint-details">
                         <div class="section">
                             <div class="section-title">Sleep</div>
-                            <ul class="task-list">
+                            <ul class="task-list" contenteditable="true" data-storage-key="sleep">
                                 <li>${checkpoint.napTime ? `Planned nap: ${checkpoint.napTime}` : ''}</li>
                                 <li>${checkpoint.position}</li>
                             </ul>
@@ -1336,7 +1433,7 @@
                         ${nextCheckpoint ? `
                             <div class="section">
                                 <div class="section-title">Upcoming</div>
-                                <ul class="task-list">
+                                <ul class="task-list" contenteditable="true" data-storage-key="upcoming">
                                     <li>${nextCheckpoint.name} (Mile ${nextCheckpoint.mile})</li>
                                     <li>${nextCheckpoint.position}</li>
                                 </ul>
@@ -1351,6 +1448,7 @@
                         </div>
                     </div>
                 `;
+                setupEditableContent();
                 // Add event listener for Continue button
                 const continueBtn = div.querySelector('#continueSleepBtn');
                 if (continueBtn) {
@@ -1401,7 +1499,7 @@
                         ${finished ? `
                             <div class="section">
                                 <div class="section-title">Congratulations!</div>
-                                <ul class="task-list">
+                                <ul class="task-list" contenteditable="true" data-storage-key="congratulations">
                                     <li>You've completed the Texas Water Safari!</li>
                                     <li>Get your finisher's medal</li>
                                     <li>Take team photos</li>
@@ -1481,13 +1579,13 @@
                     </div>
                     <div class="section">
                         <div class="section-title">Tasks</div>
-                        <ul class="task-list">
+                        <ul class="task-list" contenteditable="true" data-storage-key="tasks-${checkpoint.name}">
                             ${tasks.map(task => `<li>${task}</li>`).join('')}
                         </ul>
                     </div>
                     <div class="section">
                         <div class="section-title">Exchange</div>
-                        <ul class="exchange-list">
+                        <ul class="exchange-list" contenteditable="true" data-storage-key="exchange-${checkpoint.name}">
                             ${formattedExchange.map(item => `<li>${item}</li>`).join('')}
                         </ul>
                     </div>
@@ -1501,6 +1599,7 @@
                     </div>
                 </div>
             `;
+            setupEditableContent();
 
             // Add click handlers
             const completeButton = div.querySelector('.complete-button');
@@ -1636,6 +1735,13 @@
 
         function renderCheckpoints() {
             const checkpointsContainer = document.getElementById('checkpoints');
+            
+            // Cleanup any existing event listeners
+            const existingCard = checkpointsContainer.firstElementChild;
+            if (existingCard && existingCard.cleanup) {
+                existingCard.cleanup();
+            }
+            
             checkpointsContainer.innerHTML = '';
             const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
             const currentPace = calculateCurrentPace();
@@ -1972,6 +2078,26 @@
             const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
             window.location.href = mailtoLink;
         }
+
+        // Add storage quota management
+        function checkStorageQuota() {
+            try {
+                if (navigator.storage && navigator.storage.estimate) {
+                    navigator.storage.estimate().then(estimate => {
+                        const usedPercentage = (estimate.usage / estimate.quota) * 100;
+                        if (usedPercentage > 80) {
+                            console.warn('Local storage is almost full:', usedPercentage.toFixed(2) + '% used');
+                            // Optionally show a user warning
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error checking storage quota:', error);
+            }
+        }
+
+        // Check storage quota periodically
+        setInterval(checkStorageQuota, 60000); // Check every minute
     </script>
     <div style="height: 60px;"></div>
 </body>
