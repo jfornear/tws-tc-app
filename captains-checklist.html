@@ -477,7 +477,7 @@
         .timeline-item {
             display: flex;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 24px;
             position: relative;
             min-height: 18px;
             cursor: pointer;
@@ -652,7 +652,7 @@
             }
             .timeline-item { 
                 margin-bottom: 16px; 
-                min-height: 18px; 
+                min-height: 28px; 
             }
             .section {
                 margin-top: 4px;
@@ -789,11 +789,61 @@
     </div>
 
     <script>
-        const RACE_START = new Date('2025-06-13T09:00:00');
+        // Race Configuration
+        const RACE_CONFIG = {
+            // Set to true to use current date/time for testing
+            useCurrentTime: true,
+            // Race date and time (only used if useCurrentTime is false)
+            raceDate: '2025-06-13',
+            raceTime: '09:00:00',
+            // Timezone for the race
+            timezone: 'America/Chicago'
+        };
+
+        // Calculate race start time based on configuration
+        function getRaceStartTime() {
+            if (RACE_CONFIG.useCurrentTime) {
+                // For testing: Use current time
+                return new Date();
+            } else {
+                // For actual race: Use configured date and time
+                return new Date(`${RACE_CONFIG.raceDate}T${RACE_CONFIG.raceTime}-05:00`);
+            }
+        }
+
+        const RACE_START = getRaceStartTime();
         let raceStarted = false;
         let raceStartTime = null;
         let timerInterval = null;
         
+        // Helper functions for timezone handling
+        function toUTC(date) {
+            return new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+        }
+
+        function fromUTC(utcDate) {
+            return new Date(utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000));
+        }
+
+        function formatTime(date) {
+            return date.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: true,
+                timeZone: RACE_CONFIG.timezone
+            });
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                timeZone: RACE_CONFIG.timezone
+            });
+        }
+
         const checkpoints = [
             {
                 name: "Race Start",
@@ -920,7 +970,7 @@
                 mile: "147",
                 time: "Sat ~11:00 PM",
                 position: "River access point",
-                exchange: ["1W (×2)", "MG Spiz"],
+                exchange: ["1W (×2)", "1F (×2)", "MG Spiz"],
                 napTime: "120 min",
                 maps: {
                     google: "https://maps.google.com/?q=29.147265,-97.317855",
@@ -1060,23 +1110,6 @@
             `;
         }
 
-        function formatTime(date) {
-            return date.toLocaleTimeString('en-US', { 
-                hour: 'numeric', 
-                minute: '2-digit',
-                hour12: true 
-            });
-        }
-
-        function formatDate(date) {
-            return date.toLocaleDateString('en-US', {
-                weekday: 'short',
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric'
-            });
-        }
-
         function calculatePace(startMile, endMile, startTime, endTime) {
             const miles = endMile - startMile;
             const hours = (endTime - startTime) / (1000 * 60 * 60);
@@ -1138,7 +1171,7 @@
             if (!raceStarted || !raceStartTime) return;
             
             const now = new Date();
-            const elapsed = now - raceStartTime;
+            const elapsed = now.getTime() - raceStartTime.getTime();
             document.getElementById('raceTimer').textContent = formatTimer(elapsed);
         }
 
@@ -1173,6 +1206,12 @@
                 return 4.5;
             }
             
+            // Try to get saved pace first
+            const savedPace = localStorage.getItem('currentPace');
+            if (savedPace) {
+                return parseFloat(savedPace);
+            }
+            
             const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
             if (completed.length === 0) {
                 return 4.5;
@@ -1188,9 +1227,13 @@
             }
             
             const elapsedMs = completionTime.getTime() - raceStart.getTime();
-            const elapsedTime = Math.max(1/3600, elapsedMs / (1000 * 60 * 60)); // Convert to hours, minimum 1 second
+            const elapsedTime = Math.max(1/3600, elapsedMs / (1000 * 60 * 60)); // hours, minimum 1 second
             const pace = parseFloat(lastCompleted.mile) / elapsedTime;
-            return pace; // Removed 20 mph cap
+            
+            // Save current pace to localStorage
+            localStorage.setItem('currentPace', pace.toString());
+            
+            return pace;
         }
 
         function calculateEstimatedArrival(checkpointMile, currentPace) {
@@ -1717,7 +1760,7 @@
                 // Ensure completion time is after race start
                 const completionTime = now < RACE_START ? new Date(RACE_START.getTime() + 1000) : now;
                 const elapsedTime = Math.max(1/3600, (completionTime - RACE_START) / (1000 * 60 * 60)); // hours, minimum 1 second
-                const pace = Math.min(20, parseFloat(checkpoint.mile) / elapsedTime); // Cap at 20 mph
+                const pace = parseFloat(checkpoint.mile) / elapsedTime;
                 const checkpointData = {
                     name: checkpoint.name,
                     mile: checkpoint.mile,
@@ -1726,6 +1769,8 @@
                 };
                 completed.push(checkpointData);
                 localStorage.setItem('completedCheckpoints', JSON.stringify(completed));
+                // Save the new pace
+                localStorage.setItem('currentPace', pace.toString());
                 setCurrentCardIndex(getCurrentCardIndex() + 1);
                 renderCheckpoints();
             });
@@ -1768,7 +1813,7 @@
         startRaceButton.addEventListener('click', () => {
             // Start the race
             raceStarted = true;
-            raceStartTime = new Date();
+            raceStartTime = new Date(); // Store current time
             startRaceButton.disabled = true;
             resetRaceButton.disabled = false;
             
@@ -1819,13 +1864,16 @@
             document.querySelectorAll('.stop-button').forEach(button => {
                 button.disabled = true;
             });
-            // Clear all progress
+            
+            // Clear only race-related data
             localStorage.removeItem('raceStartTime');
             localStorage.removeItem('raceFinished');
             localStorage.removeItem('raceFinishTime');
             localStorage.removeItem('completedCheckpoints');
             localStorage.removeItem('completedSleepCards');
             localStorage.removeItem('currentCardIndex');
+            localStorage.removeItem('currentPace'); // Clear saved pace
+            
             // Reset to initial state
             setCurrentCardIndex(0);
             // Hide modal
@@ -1852,6 +1900,8 @@
         const savedRaceStart = localStorage.getItem('raceStartTime');
         const savedRaceFinished = localStorage.getItem('raceFinished');
         const savedRaceFinishTime = localStorage.getItem('raceFinishTime');
+        const savedPace = localStorage.getItem('currentPace');
+        
         if (savedRaceStart) {
             raceStarted = true;
             raceStartTime = new Date(savedRaceStart);
@@ -1869,6 +1919,12 @@
             raceStartTime = null;
             startRaceButton.disabled = false;
             resetRaceButton.disabled = true;
+            // Clear any existing timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            document.getElementById('raceTimer').textContent = '00:00:00:00';
         }
         renderCheckpoints();
 
