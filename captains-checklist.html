@@ -241,7 +241,7 @@
             margin-right: 4px;
             color: var(--suunto-orange);
         }
-        .task-list, .exchange-list, .pace-info, .sleep-info {
+        .task-list, .exchange-list, .pace-info {
             list-style-type: none;
             margin: 0;
             padding: 0;
@@ -260,7 +260,7 @@
         [contenteditable="true"]:hover {
             outline: none;
         }
-        .task-list li, .exchange-list li, .pace-info p, .sleep-info p {
+        .task-list li, .exchange-list li, .pace-info p {
             margin: 3px 0;
             font-size: 1.08em;
             text-align: left;
@@ -596,13 +596,13 @@
                 margin-bottom: 2px;
                 margin-top: 0;
             }
-            .section-list, .task-list, .exchange-list, .pace-info, .sleep-info {
+            .section-list, .task-list, .exchange-list, .pace-info {
                 font-size: 0.93em;
                 line-height: 1.4;
                 margin-bottom: 4px;
                 margin-top: 0;
             }
-            .section-list li, .task-list li, .exchange-list li, .pace-info p, .sleep-info p {
+            .section-list li, .task-list li, .exchange-list li, .pace-info p {
                 font-size: 0.93em;
                 line-height: 1.4;
                 margin-bottom: 3px;
@@ -759,6 +759,7 @@
             <p>This will clear all checkpoint times and race data. This action cannot be undone.</p>
             <div class="modal-buttons">
                 <button class="modal-button confirm-button" id="confirmReset">Yes, Reset Race</button>
+                <button class="modal-button confirm-button" id="confirmResetWithEdits">Reset Race & Clear Edits</button>
                 <button class="modal-button cancel-button" id="cancelReset">Cancel</button>
             </div>
         </div>
@@ -846,23 +847,25 @@
 
         const checkpoints = [
             {
-                name: "Race Start",
-                mile: "0",
+                name: "Aquarena Springs / RACE START",
+                mile: "1",
                 time: "Fri 9:00 AM",
                 position: "The Meadows Center, Spring Lake, San Marcos, TX",
-                exchange: ["Be at boats by 8:00 AM", "Wait for official permission to enter water"],
+                directions: "Exit IH-35 (Exit 206) at Aquarena Springs Drive (TX 82). Travel west on Aquarena Springs Drive. Stay to the right and do not get on the overpass. At the stoplight, take a left on 140 and then a right on Post Rd/Laurel St. Directly across from Bobcat Stadium. Pass through golf course.<br><br>PARKING: some parking is available in the parking lots once you pass through the golf course although it will fill up. Space is set up to drop off boats/gear and then park in surrounding lots. Alternate parking is available across Hwy 80 in the Campus parking lots. Shuttles typically from nearby parking lots to Aquarina Springs.",
+                exchange: ["Be at boats by 8:00 AM", "Each man has 1 food pack, 2 ice water jugs"],
                 isStart: true,
                 maps: {
-                    google: "https://maps.google.com/?q=29.8897,-97.9389",
-                    apple: "https://maps.apple.com/?q=29.8897,-97.9389"
+                    google: "https://maps.google.com/?q=201+San+Marcos+Springs+Dr,+San+Marcos,+TX+78666",
+                    apple: "https://maps.apple.com/?q=201+San+Marcos+Springs+Dr,+San+Marcos,+TX+78666"
                 }
             },
             {
-                name: "Staples Dam",
-                mile: "16.6",
-                time: "Fri ~12:30 PM (Deadline 2 PM)",
-                position: "River RIGHT below the dam, on rocks",
-                exchange: ["1W (×2)", "MG Spiz"],
+                name: "Staples - CHECKPOINT 1",
+                mile: "17",
+                time: "Fri ~12:30 PM (Deadline 2:00 PM)",
+                position: "River RIGHT below the dam, on the rocks",
+                directions: "Return to Hwy 80 and turn right. Travel (3.4 mi.) on Hwy 80 to FM 1977, turn Right. 2.3 mi. to bridge.<br>Teams will portage both river left and river right. TC's - know which side your team is going to portage. Official Checkpoint will be on river right, don't forget to sign out your team.<br>Best spectator viewing is on river right. The owners are very hospitable to TWS so please be considerate. Parking is tight, prepare to walk and carry items.",
+                exchange: ["1W (×2)", "1 ice pack (×2)", "MG Spiz"],
                 napTime: "30 min",
                 maps: {
                     google: "https://maps.google.com/?q=29.782312,-97.83131",
@@ -874,11 +877,12 @@
                 mile: "26",
                 time: "Fri ~3:00 PM",
                 position: "River LEFT on the beach",
-                exchange: ["1W (×2)", "1F (×2)"],
+                directions: "Return to Hwy 80, turn right.<br>Travel 3.6 mi to FM 20 and turn right. (There is a flashing yellow light and a Valero gas station at turn.)<br>Turn right on Hwy 20 to bridge.<br>Amigo's beach is on river left - you can pay to park in their parking lot or TCKRA members with a parking sticker can park for free.<br>You can also access by taking HWY 621 to HWY 20 which will take you into Fentress. Amigo's beach will be on the right after crossing the river.",
+                exchange: ["1W (×2)", "1F (×2)", "1 ice pack (×2)"],
                 napTime: "45 min",
                 maps: {
-                    google: "https://maps.google.com/?q=29.752618,-97.781095",
-                    apple: "https://maps.apple.com/?q=29.752618,-97.781095"
+                    google: "https://maps.google.com/?q=13701+State+Park+Rd,+Fentress,+TX+78622",
+                    apple: "https://maps.apple.com/?q=13701+State+Park+Rd,+Fentress,+TX+78622"
                 }
             },
             {
@@ -886,6 +890,7 @@
                 mile: "33",
                 time: "Fri ~4:30 PM",
                 position: "River LEFT under the bridge",
+                directions: "Back to Hwy 80. Turn right (1.8 mi.) to CR119/ Stairtown Road (NOT Stairtown Loop).<br>Turn right (.8 mi.) to bridge.<br>Park on the road. Viewing possible from bridge.<br>Access river from either side directly under the bridge.<br>Do NOT follow the dirt road down to the gravel bar. Private property and TWS does not have approval to access.",
                 exchange: ["1W (×2)"],
                 napTime: "30 min",
                 maps: {
@@ -894,10 +899,11 @@
                 }
             },
             {
-                name: "Luling",
-                mile: "39.62",
-                time: "Fri ~6:00 PM (Deadline 8 PM)",
-                position: "River LEFT on the beach",
+                name: "Luling HWY 90 - CHECKPOINT 2",
+                mile: "40",
+                time: "Fri ~6:00 PM (Deadline 8:00 PM)",
+                position: "River LEFT on beach",
+                directions: "Return to Hwy 80 and turn Right. Travel into Luling. Turn right at stop light onto HWY 183. Turn right at stop light onto HW 90 West. (There are several shortcuts through town.)<br>Drive 2.6 miles on on HWY 90 to picnic area. Look for sign saying 1 mile to picnic area. Turn left before the bridge (Paddling Trail) - easy to miss. It's the first left after leaving town.<br>Go under bridge, stay left, go under bridge again, continue down to river.<br>There is no shade and will be busy with locals and spectators hanging out for the day. Expect a crowd. Parking will be tight, be prepared to walk.",
                 exchange: ["1W (×2)", "1F (×2)", "MG Spiz"],
                 napTime: "90 min",
                 maps: {
@@ -906,59 +912,51 @@
                 }
             },
             {
-                name: "Luling Zedler Dam",
-                mile: "45.6",
+                name: "Luling Dam/Zedler Mill",
+                mile: "46",
                 time: "Fri ~7:30 PM",
-                position: "In the water below dam, river RIGHT",
-                exchange: ["2W (×2)"],
+                position: "Meet in water below the dam for exchange, river RIGHT",
+                directions: "Return to HWY 90 and turn right (heading back into town), travel 2.6 mi. to Hwy 80. Turn right onto HWY 80.<br>Cross the bridge and turn right (signs for Texas Paddling Trail). Teams will portage on the river right.<br>Zedler Mill is on the right (Laurel Street) before the bridge and is good for spectator viewing.",
+                exchange: ["2W (×2)", "Night prep: Attach light and sleep sling"],
                 napTime: "30 min",
                 maps: {
-                    google: "https://maps.google.com/?q=29.666467,-97.651382",
-                    apple: "https://maps.apple.com/?q=29.666467,-97.651382"
+                    google: "https://maps.google.com/?q=29.666222,-97.651944",
+                    apple: "https://maps.apple.com/?q=29.666222,-97.651944"
                 }
             },
             {
-                name: "Palmetto",
+                name: "Palmetto State Park - CHECKPOINT 3",
                 mile: "60",
-                time: "Fri ~11:00 PM",
-                position: "River RIGHT - watch other teams for portage decision",
-                exchange: ["2W (×2)", "1F (×2)", "MG Spiz"],
+                time: "Fri ~11:00 PM (Deadline 6:00 AM Saturday)",
+                position: "River RIGHT, watch other teams, decide run or portage bridge",
+                directions: "Park pass is needed - purchase a park pass at race check-in or stop at the entrance to pay for day pass.<br>Go back into Luling on Hwy 80 and turn right onto Hwy 90/183.<br>OR - go south on 80 to I-10, head East on I-10 one exit to 183.<br>Go to Park Road 11, turn right (Stone wall/entrance to State Park) or keep going to 261 (both end up on the same spot).<br>Look for 'Palmetto State Park 1 mile ahead' signs along Hwy 90/183.<br>Park Headquarters will be on Right - cross 3 bridges, to second PR 11 sign.<br>Turn left take PR 11 for (.5 mi).<br>Note: Follow signs or park personnel - bridge may be accessed from both sides of the river. If parking is full on one side you may be directed to the other parking area.",
+                exchange: ["2W (×2)", "1F (×2)", "MG Spiz", "Prep: Attach sleep sling. MG and MR should each try and sleep an hour while other paddles."],
                 napTime: "120 min",
                 maps: {
-                    google: "https://maps.google.com/?q=29.589948,-97.585067",
-                    apple: "https://maps.apple.com/?q=29.589948,-97.585067"
+                    google: "https://maps.google.com/?q=29.589361,-97.583972",
+                    apple: "https://maps.apple.com/?q=29.589361,-97.583972"
                 }
             },
             {
-                name: "Optional Sleep: Friday Night",
-                mile: "60.5",
-                time: "Fri Night (suggested 12:00 AM–2:00 AM)",
-                position: "Rest area or safe riverside spot",
-                exchange: ["Sleep (up to 2 hours)", "Alarm set"],
-                napTime: "120 min",
-                maps: {
-                    google: "https://maps.google.com/?q=29.589948,-97.585067",
-                    apple: "https://maps.apple.com/?q=29.589948,-97.585067"
-                }
-            },
-            {
-                name: "Gonzalez Dam",
-                mile: "85",
-                time: "Sat ~6:00 AM (Deadline 2 PM)",
-                position: "River LEFT above dam - accompany team on portage walk",
-                exchange: ["4W (×2)", "1LF (×2)"],
+                name: "Gonzales Dam - CHECKPOINT 4",
+                mile: "84",
+                time: "Sat ~7:00 AM (Deadline 2:00 PM)",
+                position: "River LEFT above the dam, walk with us as it's a long portage to below the dam",
+                directions: "Back to light at the intersection of Hwy 90A and Hwy 183.<br>Turn right on Hwy 183.<br>Continue about 1.3 miles. Dam will be on your right. Parking is located at the first right after the dam (parking for soccer/baseball fields).<br>Be prepared to carry supplies for team from parking to the dam.",
+                exchange: ["4W (×2)", "1LF (×2)", "2 ice packs (×2)", "Prep: Take off sleep sling. Take off light, make sure it is charging."],
                 napTime: "90 min",
                 maps: {
-                    google: "https://maps.google.com/?q=29.497036,-97.45554",
-                    apple: "https://maps.apple.com/?q=29.497036,-97.45554"
+                    google: "https://maps.google.com/?q=29.483333,-97.448333",
+                    apple: "https://maps.apple.com/?q=29.483333,-97.448333"
                 }
             },
             {
-                name: "Hochheim",
+                name: "Hochheim - CHECKPOINT 5",
                 mile: "123",
-                time: "Sat ~3:00 PM (Deadline 4 AM Sun)",
-                position: "Near steep slope down to river",
-                exchange: ["2W (×2)", "1F (×2)"],
+                time: "Sat ~3:00 PM (Deadline 4:00 AM Sunday)",
+                position: "Slope is steep down to river",
+                directions: "From Gonzales 183 Checkpoint turn right on Hwy 183. Go (16 mi) to the bridge, turn off on your left just before the Guadalupe River Bridge (small drive next to bridge). Proceed beside bridge and approximately 20 yards before reaching the river, there is a metal gate on the left. Turn left through the gate and drive, parallel to the river, for approx. 200 yards to the checkpoint on the right.",
+                exchange: ["2W (×2)", "1F (×2)", "Consider fresh food from a restaurant as above"],
                 napTime: "90 min",
                 maps: {
                     google: "https://maps.google.com/?q=29.314262,-97.30321",
@@ -966,11 +964,12 @@
                 }
             },
             {
-                name: "Cheapside",
-                mile: "147",
-                time: "Sat ~11:00 PM",
-                position: "River access point",
-                exchange: ["1W (×2)", "1F (×2)", "MG Spiz"],
+                name: "Cheapside - CHECKPOINT 6",
+                mile: "148",
+                time: "Sat ~11:00 PM (Deadline 11:00 AM Sunday)",
+                position: "",
+                directions: "From Hochheim bridge turn left on Hwy 183.<br>Go towards Cuero and turn right on Old Gonzales Road.<br>Left on 108, Right on 124 and then Right on 77.<br>Go to gravel road past bridge, turn right under bridge.<br><br>Alt path: Go north on 183 and turn left on 77.",
+                exchange: ["2W (×2)", "1F (×2)", "MG Spiz", "Prep: attach sleep sling and light"],
                 napTime: "120 min",
                 maps: {
                     google: "https://maps.google.com/?q=29.147265,-97.317855",
@@ -978,23 +977,12 @@
                 }
             },
             {
-                name: "Optional Sleep: Saturday Night",
-                mile: "147.5",
-                time: "Sat Night (suggested 12:00 AM–2:00 AM)",
-                position: "Rest area or safe riverside spot",
-                exchange: ["Sleep (up to 2 hours)", "Alarm set"],
-                napTime: "120 min",
-                maps: {
-                    google: "https://maps.google.com/?q=29.147265,-97.317855",
-                    apple: "https://maps.apple.com/?q=29.147265,-97.317855"
-                }
-            },
-            {
-                name: "Cuero",
-                mile: "157",
-                time: "Sun ~5:00 AM",
-                position: "River access point",
-                exchange: ["2W (×2)", "1F (×2)"],
+                name: "Cuero HWY 236 - CHECKPOINT 7",
+                mile: "160",
+                time: "Sun ~4:00 AM (Deadline 3:00 PM)",
+                position: "",
+                directions: "From Cheapside or FM 72 - travel back into Cuero.<br>Go through town to light at (Morgan St./Arneckville), turn east on E. Morgan Ave.<br>Follow E. Morgan Ave. for (.5 mi) to FM 236/Arneckville Road.<br>Turn right and go (2.5 mi.) to bridge.<br>Exit right on gravel road before bridge.",
+                exchange: ["2W (×2)", "1F (×2)", "Prep: remove sleep sling, remove light and make sure it is charging"],
                 napTime: "90 min",
                 maps: {
                     google: "https://maps.google.com/?q=29.051293,-97.265117",
@@ -1005,8 +993,9 @@
                 name: "Thomaston Bridge",
                 mile: "178",
                 time: "Sun ~9:30 AM",
-                position: "River RIGHT, steep access to bank",
-                exchange: ["2W (×2)", "1F (×2)", "MG Spiz"],
+                position: "River right, it is steep to river",
+                directions: "Follow FM236 to CR 418 - use caution at night, narrow roads and limited street sign's.<br><br>Alt Route:<br>Go back to Hwy 183, turn right.<br>Proceed (.3 mi.) to Hwy 87, turn right on Hwy 87.<br>Go (11.8 mi) to Thomaston River Road, turn right (2.3 mi.) to bridge. Cross bridge and park on either side.<br><br>Note: Steep river access. A rope may be necessary to access the river.",
+                exchange: ["2W (×2)", "1F (×2)", "1 ice pack (×2)", "MG Spiz"],
                 napTime: "45 min",
                 maps: {
                     google: "https://maps.google.com/?q=28.974712,-97.187881",
@@ -1014,11 +1003,12 @@
                 }
             },
             {
-                name: "Victoria City Park Boat Ramp",
+                name: "Victoria City Park - CHECKPOINT 8",
                 mile: "200",
-                time: "Sun ~2:00 PM",
-                position: "In the water at the boat ramp",
-                exchange: ["3W (×2)", "1F (×2)"],
+                time: "Sun ~2:00 PM (Deadline 6:00 AM Monday)",
+                position: "In the water, at the boat ramp",
+                directions: "From Nursery FM 447, go back to Hwy 87, turn right.<br>Go (8.9 mi) to Magnolia Street (Easy to miss, 3rd right after Crestwood stop light, no stoplight at Magnolia).<br>Turn right on Magnolia and go straight (.4 mi) into Victoria City Park past Little League Complex.<br>Go past the playground complex. When you reach the Victoria Memorial Rose Garden on your left, turn right (down the hill) into parking area at boat ramp and checkpoint. Parking can be tight.",
+                exchange: ["3W (×2)", "1F (×2)", "1 ice pack (×2)"],
                 napTime: "90 min",
                 maps: {
                     google: "https://maps.google.com/?q=28.824706,-97.01542",
@@ -1026,11 +1016,12 @@
                 }
             },
             {
-                name: "Swinging Bridge",
-                mile: "231",
-                time: "Sun ~8:00 PM",
-                position: "River LEFT",
-                exchange: ["2W (×2)", "1F (×2)"],
+                name: "Swinging Bridge - CHECKPOINT 9",
+                mile: "228",
+                time: "Sun ~8:00 PM (Deadline 4:00 PM Monday)",
+                position: "Access is river left, be there",
+                directions: "Take Hwy 59 back to Hwy 185 (Victoria/Bloomington Exit), turn right. Go to 1432 and turn right (Conoco Gas station). When road ends at gates, turn right. When paved road turns right, stay straight on gravel road (will loop left around plant). Follow gravel road for aprox 3 miles. Be sure to close any gates you open. Checkpoint will be located at the boat ramp on INVISTA property. NOTE: Swinging Bridge is owned by Invista who controls access to the river. It is open for the race only and is not accessible for training runs.",
+                exchange: ["2W (×2)", "1F (×2)", "Prep: Attach sleep sling and light"],
                 napTime: "120 min",
                 maps: {
                     google: "https://maps.google.com/?q=28.651783,-96.962229",
@@ -1038,22 +1029,11 @@
                 }
             },
             {
-                name: "Optional Sleep: Sunday Night",
-                mile: "231.5",
-                time: "Sun Night (suggested 12:00 AM–2:00 AM)",
-                position: "Rest area or safe riverside spot",
-                exchange: ["Sleep (up to 2 hours)", "Alarm set"],
-                napTime: "120 min",
-                maps: {
-                    google: "https://maps.google.com/?q=28.651783,-96.962229",
-                    apple: "https://maps.apple.com/?q=28.651783,-96.962229"
-                }
-            },
-            {
-                name: "Papa & Maga / Calhoun Tivoli",
+                name: "Papa & Maga / Calhoun Tivoli - CHECKPOINT 10",
                 mile: "251",
-                time: "Mon ~3:00 AM",
-                position: "At boat ramp dock — in water or on dock",
+                time: "Mon ~3:00 AM (Deadline 3:00 AM Tuesday)",
+                position: "Boat ramp with dock next to it, can be in water at ramp or on the dock",
+                directions: "Return to Hwy 185 the way you came in. Go (13.5 mi) to intersection with Hwy 35, turn right. Take Hwy 35 towards Tivoli. Take a left on the last road right before the bridge.",
                 exchange: ["2W (×2)", "1F (×2)", "MG Spiz"],
                 napTime: "90 min",
                 maps: {
@@ -1062,10 +1042,11 @@
                 }
             },
             {
-                name: "Finish",
+                name: "Finish - CHECKPOINT 12",
                 mile: "260",
                 time: "",
-                position: "Seadrift Finish Line",
+                position: "Swan Point Park",
+                directions: "SWAN POINT: Return to Hwy 35 and back to HWY 183. After passing through Seadrift, turn right on Gates road and left on Old Settlement Road. Turn right on Swan Point Road and follow it all the way to Swan Point Park. FINISH LINE: Once the team crosses the bouy they are done. Meaning anyone can now hug them, help with their boat (in fact please help, they have paddled 260 miles and are tired), help them walk up the ramp, etc. There are oyster's in the water at the finish line - please wear shoes! Reminders: Please do not set up chairs in front of or around the finish sign. Finishers have worked hard to get to that sign and we want to give them the space for their pictures. Please try not to park or block the road between the ramp and the finish sign (even when loading boats.)",
                 exchange: [],
                 napTime: "",
                 maps: {
@@ -1078,20 +1059,22 @@
 
         // Update goal times for new categories
         const checkpointGoals = {
-            "Staples Dam": {mile: 16.6, g65: "10:36 AM", g70: "11:01 AM", g80: "12:06 PM", g85: "12:41 PM", g90: "1:16 PM", g100: "2:06 PM"},
+            "Aquarena Springs / RACE START": {mile: 1, g65: "9:00 AM", g70: "9:00 AM", g80: "9:00 AM", g85: "9:00 AM", g90: "9:00 AM", g100: "9:00 AM"},
+            "Staples - CHECKPOINT 1": {mile: 17, g65: "10:36 AM", g70: "11:01 AM", g80: "12:06 PM", g85: "12:41 PM", g90: "1:16 PM", g100: "2:06 PM"},
             "Fentress": {mile: 26, g65: "12:16 PM", g70: "12:49 PM", g80: "2:00 PM", g85: "2:41 PM", g90: "3:22 PM", g100: "4:30 PM"},
             "Stairtown": {mile: 33, g65: "1:16 PM", g70: "1:52 PM", g80: "3:06 PM", g85: "3:51 PM", g90: "4:36 PM", g100: "5:51 PM"},
-            "Luling": {mile: 39.62, g65: "2:09 PM", g70: "2:49 PM", g80: "4:08 PM", g85: "4:58 PM", g90: "5:48 PM", g100: "7:13 PM"},
-            "Luling Zedler Dam": {mile: 45.6, g65: "2:56 PM", g70: "3:42 PM", g80: "5:03 PM", g85: "5:58 PM", g90: "6:53 PM", g100: "8:36 PM"},
-            "Palmetto": {mile: 60, g65: "5:01 PM", g70: "5:51 PM", g80: "7:39 PM", g85: "8:51 PM", g90: "10:03 PM", g100: "12:31 AM"},
-            "Gonzalez Dam": {mile: 85, g65: "8:19 PM", g70: "9:25 PM", g80: "11:44 PM", g85: "1:16 AM", g90: "2:48 AM", g100: "5:35 AM"},
-            "Hochheim": {mile: 123, g65: "1:44 AM", g70: "3:01 AM", g80: "4:46 AM", g85: "6:13 AM", g90: "7:40 AM", g100: "10:58 AM"},
-            "Cheapside": {mile: 147, g65: "5:13 AM", g70: "6:40 AM", g80: "8:50 AM", g85: "10:28 AM", g90: "12:06 PM", g100: "3:11 PM"},
-            "Cuero": {mile: 157, g65: "6:08 AM", g70: "7:38 AM", g80: "9:50 AM", g85: "11:32 AM", g90: "1:14 PM", g100: "4:27 PM"},
+            "Luling HWY 90 - CHECKPOINT 2": {mile: 40, g65: "2:09 PM", g70: "2:49 PM", g80: "4:08 PM", g85: "4:58 PM", g90: "5:48 PM", g100: "7:13 PM"},
+            "Luling Dam/Zedler Mill": {mile: 46, g65: "2:56 PM", g70: "3:42 PM", g80: "5:03 PM", g85: "5:58 PM", g90: "6:53 PM", g100: "8:36 PM"},
+            "Palmetto State Park - CHECKPOINT 3": {mile: 60, g65: "5:01 PM", g70: "5:51 PM", g80: "7:39 PM", g85: "8:51 PM", g90: "10:03 PM", g100: "12:31 AM"},
+            "Gonzales Dam - CHECKPOINT 4": {mile: 84, g65: "8:19 PM", g70: "9:25 PM", g80: "11:44 PM", g85: "1:16 AM", g90: "2:48 AM", g100: "5:35 AM"},
+            "Hochheim - CHECKPOINT 5": {mile: 123, g65: "1:44 AM", g70: "3:01 AM", g80: "4:46 AM", g85: "6:13 AM", g90: "7:40 AM", g100: "10:58 AM"},
+            "Cheapside - CHECKPOINT 6": {mile: 148, g65: "5:13 AM", g70: "6:40 AM", g80: "8:50 AM", g85: "10:28 AM", g90: "12:06 PM", g100: "3:11 PM"},
+            "Cuero HWY 236 - CHECKPOINT 7": {mile: 160, g65: "6:08 AM", g70: "7:38 AM", g80: "9:50 AM", g85: "11:32 AM", g90: "1:14 PM", g100: "4:27 PM"},
             "Thomaston Bridge": {mile: 178, g65: "8:09 AM", g70: "9:44 AM", g80: "12:16 PM", g85: "2:08 PM", g90: "4:00 PM", g100: "7:09 PM"},
-            "Victoria City Park Boat Ramp": {mile: 200, g65: "10:38 AM", g70: "12:23 PM", g80: "2:51 PM", g85: "4:54 PM", g90: "6:57 PM", g100: "10:29 PM"},
-            "Swinging Bridge": {mile: 231, g65: "3:55 PM", g70: "4:43 PM", g80: "7:55 PM", g85: "10:13 PM", g90: "12:31 AM", g100: "5:21 AM"},
-            "Papa & Maga / Calhoun Tivoli": {mile: 251, g65: "6:25 PM", g70: "7:19 PM", g80: "12:04 AM", g85: "2:36 AM", g90: "5:08 AM", g100: "9:43 AM"}
+            "Victoria City Park - CHECKPOINT 8": {mile: 200, g65: "10:38 AM", g70: "12:23 PM", g80: "2:51 PM", g85: "4:54 PM", g90: "6:57 PM", g100: "10:29 PM"},
+            "Swinging Bridge - CHECKPOINT 9": {mile: 228, g65: "3:55 PM", g70: "4:43 PM", g80: "7:55 PM", g85: "10:13 PM", g90: "12:31 AM", g100: "5:21 AM"},
+            "Papa & Maga / Calhoun Tivoli - CHECKPOINT 10": {mile: 251, g65: "6:25 PM", g70: "7:19 PM", g80: "12:04 AM", g85: "2:36 AM", g90: "5:08 AM", g100: "9:43 AM"},
+            "Finish - CHECKPOINT 12": {mile: 260, g65: "11:14 PM", g70: "1:00 AM", g80: "2:56 AM", g85: "5:04 AM", g90: "7:01 AM", g100: "11:00 AM"}
         };
 
         // Helper to get new goal times for a checkpoint
@@ -1122,37 +1105,90 @@
             return new Date(currentTime.getTime() + (hoursToNext * 60 * 60 * 1000));
         }
 
+        // Update the calculateEstimatedArrival function
+        function calculateEstimatedArrival(mile, currentPace) {
+            // Get the actual race start time from localStorage or use current time for testing
+            const raceStart = raceStarted ? raceStartTime : new Date();
+            
+            // Calculate total hours from start based on current pace
+            const totalHours = mile / currentPace;
+            
+            // Calculate arrival time by adding hours to start time
+            const arrivalTime = new Date(raceStart.getTime() + (totalHours * 60 * 60 * 1000));
+            
+            return arrivalTime;
+        }
+
+        // Update the calculateCurrentPace function to be more accurate
+        function calculateCurrentPace() {
+            if (!raceStarted) {
+                return 4.5; // Default pace if race hasn't started
+            }
+            
+            // Try to get saved pace first
+            const savedPace = localStorage.getItem('currentPace');
+            if (savedPace) {
+                return parseFloat(savedPace);
+            }
+            
+            const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+            if (completed.length < 2) {
+                return 4.5; // Default pace if not enough checkpoints
+            }
+            
+            // Calculate pace based on last two checkpoints for more accuracy
+            const lastTwo = completed.slice(-2);
+            const miles = parseFloat(lastTwo[1].mile) - parseFloat(lastTwo[0].mile);
+            const timeDiff = (new Date(lastTwo[1].completionTime) - new Date(lastTwo[0].completionTime)) / (1000 * 60 * 60);
+            
+            // Ensure we don't divide by zero and have a minimum time difference
+            const hours = Math.max(1/3600, timeDiff); // minimum 1 second
+            const pace = miles / hours;
+            
+            // Save current pace to localStorage
+            localStorage.setItem('currentPace', pace.toString());
+            
+            return pace;
+        }
+
         function updateEstimatedTimes(lastCheckpoint) {
             if (!lastCheckpoint) return;
+            
             const currentPace = calculateCurrentPace();
             const remainingCheckpoints = checkpoints.filter(cp => 
                 parseFloat(cp.mile) > parseFloat(lastCheckpoint.mile)
             );
+            
             remainingCheckpoints.forEach(cp => {
-                const cpGoal = checkpointGoals[cp.name];
-                if (cpGoal) {
-                    const hoursFromStart = cpGoal.mile / currentPace;
-                    const arrival = new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
-                    const checkpointElement = document.querySelector(`[data-checkpoint="${cp.name}"]`);
-                    if (checkpointElement) {
-                        // Update estimated time under checkpoint name
-                        const headerTime = checkpointElement.querySelector('.checkpoint-time');
-                        if (headerTime) {
-                            let headerText = `${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph)`;
-                            const checkpointObj = checkpoints.find(c => c.name === cp.name);
-                            if (checkpointObj && checkpointObj.time && checkpointObj.time.includes('Deadline')) {
-                                const deadline = checkpointObj.time.match(/Deadline[^)]+/);
-                                if (deadline) {
-                                    headerText += ` — ${deadline[0]}`;
-                                }
+                const arrival = calculateEstimatedArrival(parseFloat(cp.mile), currentPace);
+                const checkpointElement = document.querySelector(`[data-checkpoint="${cp.name}"]`);
+                
+                if (checkpointElement) {
+                    // Update estimated time under checkpoint name
+                    const headerTime = checkpointElement.querySelector('.checkpoint-time');
+                    if (headerTime) {
+                        let headerText = `Est. Arrival: ${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph)`;
+                        if (cp.time && cp.time.includes('Deadline')) {
+                            const deadline = cp.time.match(/Deadline[^)]+/);
+                            if (deadline) {
+                                headerText += ` — ${deadline[0]}`;
                             }
-                            headerTime.textContent = headerText;
                         }
-                        // Update time chart
-                        const goalTimesDiv = checkpointElement.querySelector('.goal-times');
-                        if (goalTimesDiv) {
-                            goalTimesDiv.innerHTML = getGoalTimes(cp.name, currentPace);
-                        }
+                        headerTime.textContent = headerText;
+                    }
+                    
+                    // Update pace info
+                    const goalTimesDiv = checkpointElement.querySelector('.goal-times');
+                    if (goalTimesDiv) {
+                        const hoursToFinish = 260 / currentPace;
+                        goalTimesDiv.innerHTML = `
+                            <div class="section" style="margin-top:8px;">
+                                <div class="section-title">Pace</div>
+                                <ul class="exchange-list">
+                                    <li><span style="color:var(--suunto-white);font-weight:700;">${currentPace.toFixed(1)} mph</span><span style="color:var(--suunto-gray);font-weight:400;"> &nbsp;|&nbsp; </span><span style="color:var(--suunto-white);font-weight:700;">${Math.round(hoursToFinish)}h</span></li>
+                                </ul>
+                            </div>
+                        `;
                     }
                 }
             });
@@ -1189,56 +1225,12 @@
         }
 
         // Find the next actionable card (checkpoint or sleep card)
-        function getNextActionableIndex(checkpoints, completed, completedSleepCards) {
+        function getNextActionableIndex(checkpoints, completed) {
             for (let i = 0; i < checkpoints.length; i++) {
                 const cp = checkpoints[i];
-                if (isSleepCard(cp)) {
-                    if (!completedSleepCards.includes(cp.name)) return i;
-                } else {
-                    if (!completed.find(c => c.name === cp.name)) return i;
-                }
+                if (!completed.find(c => c.name === cp.name)) return i;
             }
             return -1;
-        }
-
-        function calculateCurrentPace() {
-            if (!raceStarted) {
-                return 4.5;
-            }
-            
-            // Try to get saved pace first
-            const savedPace = localStorage.getItem('currentPace');
-            if (savedPace) {
-                return parseFloat(savedPace);
-            }
-            
-            const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
-            if (completed.length === 0) {
-                return 4.5;
-            }
-            
-            const lastCompleted = completed[completed.length - 1];
-            const completionTime = new Date(lastCompleted.completionTime);
-            const raceStart = new Date(RACE_START);
-            
-            // Ensure completion time is after race start
-            if (completionTime < raceStart) {
-                return 4.5;
-            }
-            
-            const elapsedMs = completionTime.getTime() - raceStart.getTime();
-            const elapsedTime = Math.max(1/3600, elapsedMs / (1000 * 60 * 60)); // hours, minimum 1 second
-            const pace = parseFloat(lastCompleted.mile) / elapsedTime;
-            
-            // Save current pace to localStorage
-            localStorage.setItem('currentPace', pace.toString());
-            
-            return pace;
-        }
-
-        function calculateEstimatedArrival(checkpointMile, currentPace) {
-            const hoursFromStart = checkpointMile / currentPace;
-            return new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
         }
 
         // Add robust storage management functions
@@ -1288,7 +1280,6 @@
             const div = document.createElement('div');
             div.className = 'checkpoint';
             div.setAttribute('data-checkpoint', checkpoint.name);
-            const isSleepCard = checkpoint.name && checkpoint.name.startsWith('Optional Sleep:');
             const isFinishCard = checkpoint.isFinish;
             const isStartCard = checkpoint.isStart;
             
@@ -1335,17 +1326,22 @@
             if (isStartCard) {
                 div.innerHTML = `
                     <div class="checkpoint-header">
-                        <div class="checkpoint-name" style="margin-bottom: 10px;">Spring Lake</div>
+                        <div class="checkpoint-name" style="margin-bottom: 10px;">${checkpoint.name}</div>
                         <div class="checkpoint-time">Friday, June 13, 2025 9:00 AM</div>
                     </div>
                     <div class="checkpoint-details">
                         <div class="section">
                             <div class="section-title">Tasks</div>
                             <ul class="task-list" contenteditable="true" data-storage-key="tasks">
-                                <li>Position yourself at: The Meadows Center, Spring Lake, San Marcos, TX</li>
+                                <li>Position yourself at: ${checkpoint.position}</li>
                                 <li>Be at your boats ready to enter the water by 8:00 AM</li>
                                 <li>DO NOT ENTER THE LAKE UNTIL YOU ARE TOLD THAT IT'S OK TO DO SO</li>
-                                <li>Note: The TWS has special permission from Texas State University to start the race on Spring Lake and must follow strict rules</li>
+                            </ul>
+                        </div>
+                        <div class="section">
+                            <div class="section-title">Directions</div>
+                            <ul class="task-list" contenteditable="true" data-storage-key="directions-${checkpoint.name}">
+                                <li>${checkpoint.directions}</li>
                             </ul>
                         </div>
                         <div class="map-buttons">
@@ -1413,12 +1409,20 @@
             const formattedExchange = [];
             let hasWater = false, hasFood = false, hasLargeFood = false, hasSpiz = false;
             checkpoint.exchange.forEach(item => {
-                if (item.includes('W')) hasWater = true;
+                if (item.includes('W')) {
+                    const match = item.match(/(\d+)W/);
+                    if (match) {
+                        const num = parseInt(match[1], 10);
+                        formattedExchange.push(num + ' water jugs per paddler');
+                    } else {
+                        formattedExchange.push('1 water jug per paddler');
+                    }
+                    hasWater = true;
+                }
                 if (item.includes('LF')) hasLargeFood = true;
                 else if (item.includes('F')) hasFood = true;
                 if (item.includes('MG Spiz')) hasSpiz = true;
             });
-            if (hasWater) formattedExchange.push('1 water jug per paddler');
             if (hasLargeFood) formattedExchange.push('1 large food pack per paddler');
             if (hasFood) formattedExchange.push('1 food pack per paddler');
             if (hasSpiz) formattedExchange.push('MG Spiz');
@@ -1427,7 +1431,6 @@
             const tasks = [
                 `Position yourself at: ${checkpoint.position}`,
                 `Prepare exchange items: ${formattedExchange.join(', ')}`,
-                `Plan for ${checkpoint.napTime} nap time`,
                 checkpoint.time.includes('Deadline') ? `Note: ${checkpoint.time.split('(')[1].replace(')', '')}` : null
             ].filter(Boolean);
 
@@ -1437,73 +1440,15 @@
                 const completionTime = new Date(completedCheckpoint.completionTime);
                 displayTime = `Arrived: ${formatDate(completionTime)} ${formatTime(completionTime)} (${completedCheckpoint.pace ? completedCheckpoint.pace.toFixed(1) : '—'} mph)`;
             } else {
-                const cp = checkpointGoals[checkpoint.name];
-                if (cp) {
-                    const hoursFromStart = cp.mile / currentPace;
-                    const arrival = new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
-                    displayTime = `Est. Arrival: ${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph)`;
-                    if (checkpoint.time && checkpoint.time.includes('Deadline')) {
-                        const deadline = checkpoint.time.match(/Deadline[^)]+/);
-                        if (deadline) {
-                            displayTime += ` — ${deadline[0]}`;
-                        }
+                const hoursFromStart = parseFloat(checkpoint.mile) / currentPace;
+                const arrival = new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
+                displayTime = `Est. Arrival: ${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph)`;
+                if (checkpoint.time && checkpoint.time.includes('Deadline')) {
+                    const deadline = checkpoint.time.match(/Deadline[^)]+/);
+                    if (deadline) {
+                        displayTime += ` — ${deadline[0]}`;
                     }
                 }
-            }
-
-            if (isSleepCard) {
-                // Get the next checkpoint for map links
-                const nextCheckpointIndex = checkpoints.findIndex(cp => cp.name === checkpoint.name) + 1;
-                const nextCheckpoint = nextCheckpointIndex < checkpoints.length ? checkpoints[nextCheckpointIndex] : null;
-                
-                // Calculate current pace
-                const currentPace = calculateCurrentPace();
-                const hoursToFinish = 260 / currentPace; // Total race distance / current pace
-                
-                div.innerHTML = `
-                    <div class="checkpoint-header">
-                        <div class="checkpoint-name" style="margin-bottom: 10px;">${checkpoint.name.replace('Optional Sleep:', 'Sleep')}</div>
-                        <div class="checkpoint-time">Current Pace: ${currentPace.toFixed(1)} mph</div>
-                    </div>
-                    <div class="checkpoint-details">
-                        <div class="section">
-                            <div class="section-title">Sleep</div>
-                            <ul class="task-list" contenteditable="true" data-storage-key="sleep">
-                                <li>${checkpoint.napTime ? `Planned nap: ${checkpoint.napTime}` : ''}</li>
-                                <li>${checkpoint.position}</li>
-                            </ul>
-                        </div>
-                        ${nextCheckpoint ? `
-                            <div class="section">
-                                <div class="section-title">Upcoming</div>
-                                <ul class="task-list" contenteditable="true" data-storage-key="upcoming">
-                                    <li>${nextCheckpoint.name} (Mile ${nextCheckpoint.mile})</li>
-                                    <li>${nextCheckpoint.position}</li>
-                                </ul>
-                            </div>
-                            <div class="map-buttons">
-                                <a class="google" href="${nextCheckpoint.maps.google}" target="_blank">Open Next in Google Maps</a>
-                                <a class="apple" href="${nextCheckpoint.maps.apple}" target="_blank">Open Next in Apple Maps</a>
-                            </div>
-                        ` : ''}
-                        <div class="checkpoint-controls">
-                            <button class="checkpoint-button complete-button" id="continueSleepBtn" style="width:100%;font-size:1.18em;padding:18px 0;border-radius:20px;font-weight:800;box-shadow:0 2px 8px 0 rgba(0,0,0,0.10);background:var(--suunto-orange);color:var(--suunto-white);border:2px solid var(--suunto-orange);cursor:pointer;">Continue</button>
-                        </div>
-                    </div>
-                `;
-                setupEditableContent();
-                // Add event listener for Continue button
-                const continueBtn = div.querySelector('#continueSleepBtn');
-                if (continueBtn) {
-                    continueBtn.disabled = !raceStarted;
-                    if (!raceStarted) continueBtn.style.opacity = 0.5;
-                    continueBtn.addEventListener('click', () => {
-                        if (!raceStarted) return;
-                        setCurrentCardIndex(getCurrentCardIndex() + 1);
-                        renderCheckpoints();
-                    });
-                }
-                return div;
             }
 
             if (isFinishCard) {
@@ -1511,27 +1456,26 @@
                 const finished = localStorage.getItem('raceFinished');
                 let finishTime = localStorage.getItem('raceFinishTime');
                 let displayTime = '--';
-                if (finished && finishTime) {
+                let finalPace = 4.5;
+                const totalMiles = 260;
+                const savedRaceStart = localStorage.getItem('raceStartTime');
+                if (finished && finishTime && savedRaceStart) {
+                    // Parse finishTime as HH:MM:SS:CC
+                    const [hours, minutes, seconds, centiseconds] = finishTime.split(':').map(Number);
+                    const totalHours = hours + (minutes / 60) + (seconds / 3600) + (centiseconds / 360000);
+                    if (totalHours > 0) {
+                        finalPace = totalMiles / totalHours;
+                    }
                     // Format the finish time to match other checkpoint cards
-                    const finishDate = new Date(RACE_START.getTime() + (parseInt(finishTime.split(':')[0]) * 60 * 60 * 1000) + 
-                                             (parseInt(finishTime.split(':')[1]) * 60 * 1000) + 
-                                             (parseInt(finishTime.split(':')[2]) * 1000));
+                    const finishDate = new Date(new Date(savedRaceStart).getTime() + (totalHours * 60 * 60 * 1000));
                     displayTime = `Finished ${formatDate(finishDate)} ${formatTime(finishDate)} (${finishTime})`;
                 } else {
-                    // Get the last completed checkpoint to calculate current pace
-                    const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
-                    const lastCompleted = completed[completed.length - 1];
-                    let currentPace = 4.5; // Default pace
-                    
-                    if (lastCompleted && lastCompleted.completionTime) {
-                        const elapsedTime = (new Date(lastCompleted.completionTime) - RACE_START) / (1000 * 60 * 60); // hours
-                        currentPace = parseFloat(lastCompleted.mile) / elapsedTime; // Removed 20 mph cap
-                    }
-                    
                     // Calculate estimated arrival based on total race distance
-                    const hoursFromStart = 260 / currentPace; // Total race distance / current pace
+                    const currentPace = calculateCurrentPace();
+                    const hoursFromStart = totalMiles / currentPace; // Total race distance / current pace
                     const arrival = new Date(RACE_START.getTime() + hoursFromStart * 60 * 60 * 1000);
                     displayTime = `${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph) — Deadline 1:00 PM Tuesday`;
+                    finalPace = currentPace;
                 }
                 div.innerHTML = `
                     <div class="checkpoint-header">
@@ -1540,6 +1484,12 @@
                     </div>
                     <div class="checkpoint-details">
                         ${finished ? `
+                            <div class="section">
+                                <div class="section-title">Final Pace</div>
+                                <ul class="exchange-list">
+                                    <li><span style="color:var(--suunto-white);font-weight:700;">${finalPace.toFixed(1)} mph</span><span style="color:var(--suunto-gray);font-weight:400;"> &nbsp;|&nbsp; </span><span style="color:var(--suunto-white);font-weight:700;">${Math.round(totalMiles / finalPace)}h</span></li>
+                                </ul>
+                            </div>
                             <div class="section">
                                 <div class="section-title">Congratulations!</div>
                                 <ul class="task-list" contenteditable="true" data-storage-key="congratulations">
@@ -1556,6 +1506,12 @@
                                 <button class="checkpoint-button complete-button" onclick="shareRaceResults()">Share Results</button>
                             </div>
                         ` : `
+                            <div class="section">
+                                <div class="section-title">Pace</div>
+                                <ul class="exchange-list">
+                                    <li><span style="color:var(--suunto-white);font-weight:700;">${finalPace.toFixed(1)} mph</span><span style="color:var(--suunto-gray);font-weight:400;"> &nbsp;|&nbsp; </span><span style="color:var(--suunto-white);font-weight:700;">${Math.round(totalMiles / finalPace)}h</span></li>
+                                </ul>
+                            </div>
                             <div class="section">
                                 <div class="section-title">Tasks</div>
                                 <ul class="task-list">
@@ -1632,12 +1588,18 @@
                             ${formattedExchange.map(item => `<li>${item}</li>`).join('')}
                         </ul>
                     </div>
+                    <div class="section">
+                        <div class="section-title">Directions</div>
+                        <ul class="task-list" contenteditable="true" data-storage-key="directions-${checkpoint.name}">
+                            <li>${checkpoint.directions}</li>
+                        </ul>
+                    </div>
                     <div class="map-buttons">
                         <a class="google" href="${checkpoint.maps.google}" target="_blank">Open in Google Maps</a>
                         <a class="apple" href="${checkpoint.maps.apple}" target="_blank">Open in Apple Maps</a>
                     </div>
                     <div class="checkpoint-controls">
-                        <button class="checkpoint-button complete-button" style="${isNext ? '' : 'display:none;'}">Check In</button>
+                        <button class="checkpoint-button complete-button" style="${isNext ? '' : 'display:none;'}">${checkpoint.name.includes('CHECKPOINT') ? 'Check In' : 'Continue'}</button>
                         <button class="checkpoint-button reset-button" style="display:none;">Reset</button>
                     </div>
                 </div>
@@ -1883,6 +1845,35 @@
             renderTimeline();
         });
 
+        // Add event listener for reset with edits button
+        document.getElementById('confirmResetWithEdits').addEventListener('click', () => {
+            raceStarted = false;
+            raceStartTime = null;
+            startRaceButton.disabled = false;
+            resetRaceButton.disabled = true;
+            // Stop timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            document.getElementById('raceTimer').textContent = '00:00:00:00';
+            // Disable all stop buttons
+            document.querySelectorAll('.stop-button').forEach(button => {
+                button.disabled = true;
+            });
+            
+            // Clear ALL data including local edits
+            localStorage.clear();
+            
+            // Reset to initial state
+            setCurrentCardIndex(0);
+            // Hide modal
+            resetModal.style.display = 'none';
+            // Re-render everything
+            renderCheckpoints();
+            renderTimeline();
+        });
+
         cancelResetButton.addEventListener('click', () => {
             resetModal.style.display = 'none';
         });
@@ -2002,11 +1993,9 @@
             const currentCardIndex = getCurrentCardIndex();
             const finished = localStorage.getItem('raceFinished');
             const finishTime = localStorage.getItem('raceFinishTime');
-            // Only regular checkpoints (not sleep cards)
-            const regularCheckpoints = checkpoints.filter(cp => !isSleepCard(cp));
             let html = '<div class="timeline-outer">';
             html += '<ul class="timeline-list">';
-            regularCheckpoints.forEach((cp, idx) => {
+            checkpoints.forEach((cp, idx) => {
                 const completedCp = completed.find(c => c.name === cp.name);
                 const isCurrent = checkpoints.findIndex(c => c.name === cp.name) === currentCardIndex;
                 const isFinish = cp.isFinish;
@@ -2019,7 +2008,7 @@
                 }
                 html += `<li class="${classes.join(' ')}" data-checkpoint-index="${checkpoints.findIndex(c => c.name === cp.name)}">`;
                 html += `<span class="timeline-dot"></span>`;
-                html += `<span class="timeline-label">${isFinish ? 'Seadrift' : (cp.name === 'Race Start' ? 'Spring Lake' : cp.name)}</span>`;
+                html += `<span class="timeline-label">${isFinish ? 'Seadrift' : cp.name}</span>`;
                 html += `<span class="timeline-time">`;
                 if (cp.name === 'Race Start') {
                     const startDate = new Date(RACE_START);

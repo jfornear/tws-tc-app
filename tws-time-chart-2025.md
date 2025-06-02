@@ -1,0 +1,28 @@
+# Texas Water Safari 2025 Official Time Chart (App-Matched)
+
+| Location / Checkpoint                        | Mile | 38hr (6.8mph) | 40hr (6.5mph) | 42hr (6.2mph) | 44hr (5.9mph) | 46hr (5.7mph) | 50hr (5.2mph) | 55hr (4.7mph) | 60hr (4.3mph) | 70hr (3.7mph) | 80hr (3.3mph) |
+|----------------------------------------------|------|---------------|---------------|---------------|---------------|---------------|---------------|---------------|---------------|---------------|---------------|
+| Aquarena Springs / RACE START                | 0    | Fri 9:00 AM   | Fri 9:00 AM   | Fri 9:00 AM   | Fri 9:00 AM   | Fri 9:00 AM   | Fri 9:00 AM   | Fri 9:00 AM   | Fri 9:00 AM   | Fri 9:00 AM   | Fri 9:00 AM   |
+| Cottonseed Rapids                            | 9    | Fri 10:20 AM  | Fri 10:24 AM  | Fri 10:28 AM  | Fri 10:32 AM  | Fri 10:36 AM  | Fri 10:45 AM  | Fri 10:55 AM  | Fri 11:06 AM  | Fri 11:27 AM  | Fri 11:48 AM  |
+| Martindale Low Water/Dam                     | 11   | Fri 10:34 AM  | Fri 10:38 AM  | Fri 10:43 AM  | Fri 10:48 AM  | Fri 10:53 AM  | Fri 11:03 AM  | Fri 11:15 AM  | Fri 11:27 AM  | Fri 11:52 AM  | Fri 12:16 PM  |
+| Staples - CHECKPOINT 1                       | 17   | Fri 11:26 AM  | Fri 11:33 AM  | Fri 11:40 AM  | Fri 11:49 AM  | Fri 11:56 AM  | Fri 12:11 PM  | Fri 12:31 PM  | Fri 12:50 PM  | Fri 1:28 PM   | Fri 2:06 PM   |
+| Fentress                                     | 26   | Fri 12:49 PM  | Fri 1:00 PM  | Fri 1:12 PM   | Fri 1:24 PM   | Fri 1:36 PM   | Fri 2:00 PM   | Fri 2:31 PM   | Fri 3:00 PM   | Fri 4:01 PM   | Fri 5:00 PM   |
+| Stairtown                                    | 33   | Fri 1:52 PM   | Fri 2:06 PM   | Fri 2:21 PM   | Fri 2:37 PM   | Fri 2:52 PM   | Fri 3:22 PM   | Fri 4:01 PM   | Fri 4:39 PM   | Fri 5:56 PM   | Fri 7:12 PM   |
+| Luling HWY 90 - CHECKPOINT 2                 | 40   | Fri 2:49 PM   | Fri 3:05 PM   | Fri 3:23 PM   | Fri 3:42 PM   | Fri 4:00 PM   | Fri 4:37 PM   | Fri 5:23 PM   | Fri 6:09 PM   | Fri 7:40 PM   | Fri 9:11 PM   |
+| Luling Zedler Dam                            | 46   | Fri 3:42 PM   | Fri 4:00 PM   | Fri 4:20 PM   | Fri 4:43 PM   | Fri 5:03 PM   | Fri 5:45 PM   | Fri 6:39 PM   | Fri 7:31 PM   | Fri 9:16 PM   | Fri 11:01 PM   |
+| Palmetto State Park - CHECKPOINT 3           | 60   | Fri 5:51 PM   | Fri 6:15 PM   | Fri 6:42 PM   | Fri 7:12 PM   | Fri 7:39 PM   | Fri 8:34 PM   | Fri 9:45 PM   | Fri 10:54 PM   | Fri 1:13 PM  | Sat 3:31 AM   |
+| Slayden                                      | 68   | Fri 6:59 PM   | Fri 7:27 PM   | Fri 7:57 PM   | Fri 8:31 PM   | Fri 9:01 PM   | Fri 10:04 PM   | Fri 11:23 PM  | Fri 12:41 PM  | Sat 3:18 AM   | Sat 5:54 AM   |
+| Gonzales HWY 90A Bridge                      | 77   | Fri 8:16 PM   | Fri 8:47 PM   | Fri 9:21 PM   | Fri 9:59 PM   | Fri 10:34 PM   | Fri 11:44 PM  | Sat 1:14 AM  | Sat 2:42 AM   | Sat 5:39 AM   | Sat 8:35 AM   |
+| Gonzales Dam - CHECKPOINT 4                  | 84   | Fri 9:25 PM   | Fri 9:59 PM   | Fri 10:37 PM  | Fri 11:18 PM  | Fri 11:56 PM  | Sat 1:14 AM  | Sat 2:53 AM   | Sat 4:30 AM   | Sat 7:45 AM   | Sat 10:59 AM   |
+| Hochheim - CHECKPOINT 5                      |123   | Sat 3:01 AM   | Sat 3:51 AM   | Sat 4:46 AM   | Sat 5:46 AM   | Sat 6:41 AM   | Sat 8:34 AM   | Sat 10:58 AM   | Sat 1:18 PM  | Sat 6:02 PM   | Sat 10:43 PM   |
+| Cheapside - CHECKPOINT 6                     |148   | Sat 6:40 AM   | Sat 7:40 AM   | Sat 8:46 AM   | Sat 9:59 AM   | Sat 11:05 AM   | Sat 1:20 PM  | Sat 4:13 PM   | Sat 7:02 PM   | Sun 12:43 AM   | Sun 6:21 AM   |
+| Cuero FM 72                                  |154   | Sat 7:38 AM   | Sat 8:41 AM   | Sat 9:50 AM   | Sat 11:05 AM   | Sat 12:15 PM  | Sat 2:36 PM  | Sat 5:37 PM   | Sat 8:33 PM   | Sun 2:30 AM   | Sun 8: AM   |
+| Cuero HWY 236 - CHECKPOINT 7                 |160   | Sat 8:42 AM   | Sat 9:22 AM   | Sat 10:05 AM  | Sat 10:51 AM  | Sat 11:30 AM  | Sat 1:16 PM   | Sat 4:00 PM   | Sat 6:44 PM   | Sat 11:56 PM  | Sun 5:08 AM   |
+| Thomaston Bridge                             |178   | Sat 11:11 AM  | Sat 12:24 PM  | Sat 1:43 PM  | Sat 3:11 PM   | Sat 4:31 PM   | Sat 7:15 PM   | Sat 10:44 PM   | Sat 2:08 AM   | Sun 9:00 AM   | Sun 3:48 PM   |
+| Nursery Bridge                               |187   | Sat 12:28 PM  | Sat 1:44 PM   | Sat 3:08 PM   | Sat 4:39 PM   | Sat 6:04 PM   | Sat 8:55 PM   | Sat 12:34 AM   | Sun 4:08 AM   | Sun 11:21 AM   | Sun 6:29 PM   |
+| Victoria City Park - CHECKPOINT 8            |200   | Sat 2:23 PM   | Sat 3:44 PM   | Sat 5:13 PM   | Sat 6:52 PM   | Sat 8:22 PM   | Sat 11:25 PM   | Sun 3:20 AM  | Sun 7:09 AM   | Sun 2:51 PM  | Sun 10:29 AM   |
+| Victoria HWY 59                              |209   | Sat 4:01 PM   | Sat 5:27 PM   | Sat 7:01 PM   | Sat 8:45 PM   | Sat 10:20 PM   | Sat 1:34 AM  | Sun 4:42 AM   | Sun 9:43 AM   | Sun 5:52 PM   | Sun 1:55 AM   |
+| Swinging Bridge - CHECKPOINT 9               |228   | Sat 7:00 PM   | Sat 8:34 PM   | Sat 10:18 PM   | Sat 12:11 AM  | Sun 12:08 AM  | Sun 5:28 AM   | Sun 9:59 AM   | Sun 2:24 PM  | Sun 11:20 PM   | Mon 8:09 AM  |
+| Papa & Maga / Calhoun Tivoli - CHECKPOINT 10 |251   | Sat 9:19 PM   | Sat 11:00 PM  | Sun 12:50 AM  | Sun 2:51 AM   | Sun 4:43 AM   | Sun 8:30 AM   | Sun 1:19 PM   | Sun 6:02 PM   | Mon 3:34 AM   | Mon 1:00 PM   |
+| Wooden Bridge                                |256   | Sat 10:03 PM  | Sat 11:46 PM  | Sun 1:38 AM   | Sun 3:42 AM   | Sun 5:36 AM   | Sun 9:27 AM   | Sun 2:23 PM   | Sun 7:11 PM   | Mon 4:55 AM   | Mon 2:32 AM   |
+| Finish - CHECKPOINT 12                       |260   | Sat 11:14 PM  | Sun 1:00 AM   | Sun 2:56 AM   | Sun 5:04 AM   | Sun 7:01 AM   | Sun 11:00 AM  | Sun 4:05 PM   | Sun 9:02 PM   | Mon 7:04 AM   | Mon 5:00 PM  |
