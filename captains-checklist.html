@@ -1479,7 +1479,7 @@
                 }
                 div.innerHTML = `
                     <div class="checkpoint-header">
-                        <div class="checkpoint-name" style="margin-bottom: 10px;">Seadrift</div>
+                        <div class="checkpoint-name" style="margin-bottom: 10px;">Seadrift - RACE FINISH</div>
                         <div class="checkpoint-time">${displayTime}</div>
                     </div>
                     <div class="checkpoint-details">
@@ -2008,19 +2008,19 @@
                 }
                 html += `<li class="${classes.join(' ')}" data-checkpoint-index="${checkpoints.findIndex(c => c.name === cp.name)}">`;
                 html += `<span class="timeline-dot"></span>`;
-                html += `<span class="timeline-label">${isFinish ? 'Seadrift' : cp.name}</span>`;
+                html += `<span class="timeline-label">${isFinish ? 'Seadrift - RACE FINISH' : cp.name}</span>`;
                 html += `<span class="timeline-time">`;
                 if (cp.name === 'Race Start') {
                     const startDate = new Date(RACE_START);
-                    html += `${formatDate(startDate)} ${formatTime(startDate)}`;
+                    html += `${formatTime(startDate)}`;
                 } else if (isFinish && finished && finishTime) {
                     const finishDate = new Date(RACE_START.getTime() + (parseInt(finishTime.split(':')[0]) * 60 * 60 * 1000) + 
                                              (parseInt(finishTime.split(':')[1]) * 60 * 1000) + 
                                              (parseInt(finishTime.split(':')[2]) * 1000));
-                    html += `${formatDate(finishDate)} ${formatTime(finishDate)}`;
+                    html += `${formatTime(finishDate)}`;
                 } else if (completedCp && completedCp.completionTime) {
                     const d = new Date(completedCp.completionTime);
-                    html += `${formatDate(d)} ${formatTime(d)}`;
+                    html += `${formatTime(d)}`;
                 } else {
                     html += '—';
                 }
