@@ -1087,7 +1087,7 @@
                 <div class="section" style="margin-top:8px;">
                     <div class="section-title">Pace</div>
                     <ul class="exchange-list">
-                        <li><span style="color:var(--suunto-white);font-weight:700;">${currentPace.toFixed(1)} mph</span><span style="color:var(--suunto-gray);font-weight:400;"> &nbsp;|&nbsp; </span><span style="color:var(--suunto-white);font-weight:700;">${Math.round(hoursToFinish)}h</span></li>
+                        <li><span style="color:var(--suunto-white);font-weight:700;">${currentPace.toFixed(1)} mph</span></li>
                     </ul>
                 </div>
             `;
@@ -1185,7 +1185,7 @@
                             <div class="section" style="margin-top:8px;">
                                 <div class="section-title">Pace</div>
                                 <ul class="exchange-list">
-                                    <li><span style="color:var(--suunto-white);font-weight:700;">${currentPace.toFixed(1)} mph</span><span style="color:var(--suunto-gray);font-weight:400;"> &nbsp;|&nbsp; </span><span style="color:var(--suunto-white);font-weight:700;">${Math.round(hoursToFinish)}h</span></li>
+                                    <li><span style="color:var(--suunto-white);font-weight:700;">${currentPace.toFixed(1)} mph</span></li>
                                 </ul>
                             </div>
                         `;
@@ -1407,32 +1407,60 @@
             
             // Format exchange items as a stacked, left-aligned list
             const formattedExchange = [];
-            let hasWater = false, hasFood = false, hasLargeFood = false, hasSpiz = false;
+            let hasWater = false, hasFood = false, hasLargeFood = false, hasSpiz = false, hasIcePack = false;
+            let waterCount = 0;
+            
             checkpoint.exchange.forEach(item => {
+                if (item.includes('LF')) hasLargeFood = true;
+                else if (item.includes('F')) hasFood = true;
                 if (item.includes('W')) {
                     const match = item.match(/(\d+)W/);
                     if (match) {
-                        const num = parseInt(match[1], 10);
-                        formattedExchange.push(num + ' water jugs per paddler');
+                        waterCount = Math.max(waterCount, parseInt(match[1], 10));
                     } else {
-                        formattedExchange.push('1 water jug per paddler');
+                        waterCount = Math.max(waterCount, 1);
                     }
                     hasWater = true;
                 }
-                if (item.includes('LF')) hasLargeFood = true;
-                else if (item.includes('F')) hasFood = true;
                 if (item.includes('MG Spiz')) hasSpiz = true;
+                if (item.includes('ice pack')) hasIcePack = true;
             });
+
+            // Add items in the specified order
             if (hasLargeFood) formattedExchange.push('1 large food pack per paddler');
-            if (hasFood) formattedExchange.push('1 food pack per paddler');
-            if (hasSpiz) formattedExchange.push('MG Spiz');
+            else if (hasFood) formattedExchange.push('1 food pack per paddler');
+            if (hasWater) formattedExchange.push(`${waterCount} water jug${waterCount > 1 ? 's' : ''} per paddler`);
+            if (hasIcePack) formattedExchange.push('1 ice pack per paddler');
+            if (hasSpiz) {
+                formattedExchange.push('MG Spiz');
+                formattedExchange.push('MR Tailwind');
+            }
+
+            // Add restaurant information for specific checkpoints
+            let restaurantInfo = '';
+            if (checkpoint.name.includes('Seadrift')) {
+                restaurantInfo = 'Restaurants: La Terraza (Mexican), Bubba\'s Seafood, The Shack, T\'s Kitchen';
+            }
+
+            if (restaurantInfo) {
+                formattedExchange.push(restaurantInfo);
+            }
 
             // Create task list based on checkpoint data
             const tasks = [
-                `Position yourself at: ${checkpoint.position}`,
-                `Prepare exchange items: ${formattedExchange.join(', ')}`,
+                `Position: ${checkpoint.position}`,
+                `Prep: ${formattedExchange.filter(item => !item.startsWith('Nearby:')).join(', ')}`,
                 checkpoint.time.includes('Deadline') ? `Note: ${checkpoint.time.split('(')[1].replace(')', '')}` : null
             ].filter(Boolean);
+
+            // Add nearby amenities to tasks if applicable
+            if (checkpoint.name.includes('Luling HWY 90')) {
+                tasks.push('Nearby: HEB, City Market BBQ, Subway');
+            } else if (checkpoint.name.includes('Palmetto State Park')) {
+                tasks.push('Nearby: Buc-ee\'s');
+            } else if (checkpoint.name.includes('Victoria City Park')) {
+                tasks.push('Nearby: HEB Plus, Target, Texan, Whataburger, Subway, Domino\'s, Walgreens, Urgent care, ER');
+            }
 
             // Calculate estimated time for this checkpoint
             let displayTime = '--';
@@ -1487,7 +1515,7 @@
                             <div class="section">
                                 <div class="section-title">Final Pace</div>
                                 <ul class="exchange-list">
-                                    <li><span style="color:var(--suunto-white);font-weight:700;">${finalPace.toFixed(1)} mph</span><span style="color:var(--suunto-gray);font-weight:400;"> &nbsp;|&nbsp; </span><span style="color:var(--suunto-white);font-weight:700;">${Math.round(totalMiles / finalPace)}h</span></li>
+                                    <li><span style="color:var(--suunto-white);font-weight:700;">${finalPace.toFixed(1)} mph</span></li>
                                 </ul>
                             </div>
                             <div class="section">
@@ -1496,6 +1524,25 @@
                                     <li>You've completed the Texas Water Safari!</li>
                                     <li>Get your finisher's medal</li>
                                     <li>Take team photos</li>
+                                </ul>
+                            </div>
+                            <div class="section">
+                                <div class="section-title">Finish Line Notes</div>
+                                <ul class="task-list">
+                                    <li>Once the team crosses the buoy they are done</li>
+                                    <li>You can now help with their boat and help them walk up the ramp</li>
+                                    <li>There are oysters in the water - please wear shoes!</li>
+                                    <li>Do not set up chairs in front of or around the finish sign</li>
+                                    <li>Do not block the road between the ramp and finish sign</li>
+                                </ul>
+                            </div>
+                            <div class="section">
+                                <div class="section-title">Nearby Restaurants</div>
+                                <ul class="task-list">
+                                    <li>La Terraza (Mexican): 6:30 AM - 9:00 PM</li>
+                                    <li>Bubba's Seafood: 11:00 AM - 10:00 PM (closed Monday)</li>
+                                    <li>The Shack: 11:00 AM - 10:00 PM</li>
+                                    <li>T's Kitchen: 11:00 AM - 8:00 PM (closed Tuesday)</li>
                                 </ul>
                             </div>
                             <div class="map-buttons">
@@ -1509,7 +1556,7 @@
                             <div class="section">
                                 <div class="section-title">Pace</div>
                                 <ul class="exchange-list">
-                                    <li><span style="color:var(--suunto-white);font-weight:700;">${finalPace.toFixed(1)} mph</span><span style="color:var(--suunto-gray);font-weight:400;"> &nbsp;|&nbsp; </span><span style="color:var(--suunto-white);font-weight:700;">${Math.round(totalMiles / finalPace)}h</span></li>
+                                    <li><span style="color:var(--suunto-white);font-weight:700;">${finalPace.toFixed(1)} mph</span></li>
                                 </ul>
                             </div>
                             <div class="section">
@@ -1518,6 +1565,25 @@
                                     <li>Position yourself at: Bill Sander Memorial Park – Seadrift</li>
                                     <li>1522 Swan Point Rd, Seadrift, TX 77983</li>
                                     <li>Note: Deadline 1:00 PM Tuesday</li>
+                                </ul>
+                            </div>
+                            <div class="section">
+                                <div class="section-title">Finish Line Notes</div>
+                                <ul class="task-list">
+                                    <li>Once the team crosses the buoy they are done</li>
+                                    <li>You can now help with their boat and help them walk up the ramp</li>
+                                    <li>There are oysters in the water - please wear shoes!</li>
+                                    <li>Do not set up chairs in front of or around the finish sign</li>
+                                    <li>Do not block the road between the ramp and finish sign</li>
+                                </ul>
+                            </div>
+                            <div class="section">
+                                <div class="section-title">Nearby Restaurants</div>
+                                <ul class="task-list">
+                                    <li>La Terraza (Mexican): 6:30 AM - 9:00 PM</li>
+                                    <li>Bubba's Seafood: 11:00 AM - 10:00 PM (closed Monday)</li>
+                                    <li>The Shack: 11:00 AM - 10:00 PM</li>
+                                    <li>T's Kitchen: 11:00 AM - 8:00 PM (closed Tuesday)</li>
                                 </ul>
                             </div>
                             <div class="map-buttons">
@@ -1573,7 +1639,7 @@
                     <div class="section">
                         <div class="section-title">Pace</div>
                         <ul class="exchange-list">
-                            <li><span style="color:var(--suunto-white);font-weight:700;">${currentPace.toFixed(1)} mph</span><span style="color:var(--suunto-gray);font-weight:400;"> &nbsp;|&nbsp; </span><span style="color:var(--suunto-white);font-weight:700;">${Math.round(260 / currentPace)}h</span></li>
+                            <li><span style="color:var(--suunto-white);font-weight:700;">${currentPace.toFixed(1)} mph</span></li>
                         </ul>
                     </div>
                     <div class="section">
@@ -1772,10 +1838,53 @@
         const confirmResetButton = document.getElementById('confirmReset');
         const cancelResetButton = document.getElementById('cancelReset');
 
+        // Initialize checkpoints
+        const checkpointsContainer = document.getElementById('checkpoints');
+        const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+        const savedRaceStart = localStorage.getItem('raceStartTime');
+        const savedRaceFinished = localStorage.getItem('raceFinished');
+        const savedRaceFinishTime = localStorage.getItem('raceFinishTime');
+        const savedPace = localStorage.getItem('currentPace');
+        
+        if (savedRaceStart) {
+            raceStarted = true;
+            raceStartTime = new Date(savedRaceStart);
+            startRaceButton.disabled = true;
+            resetRaceButton.disabled = false;
+            if (savedRaceFinished && savedRaceFinishTime) {
+                document.getElementById('raceTimer').textContent = savedRaceFinishTime;
+            } else {
+                // Start timer
+                timerInterval = setInterval(updateTimer, 10);
+                updateTimer();
+            }
+        } else {
+            raceStarted = false;
+            raceStartTime = null;
+            startRaceButton.disabled = false;
+            resetRaceButton.disabled = true;
+            // Clear any existing timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            document.getElementById('raceTimer').textContent = '00:00:00:00';
+        }
+
+        // Initialize current card index if not set
+        if (!localStorage.getItem('currentCardIndex')) {
+            localStorage.setItem('currentCardIndex', '0');
+        }
+
+        // Initial render
+        renderCheckpoints();
+        renderTimeline();
+
+        // Add event listeners for race controls
         startRaceButton.addEventListener('click', () => {
             // Start the race
             raceStarted = true;
-            raceStartTime = new Date(); // Store current time
+            raceStartTime = new Date();
             startRaceButton.disabled = true;
             resetRaceButton.disabled = false;
             
@@ -1845,35 +1954,6 @@
             renderTimeline();
         });
 
-        // Add event listener for reset with edits button
-        document.getElementById('confirmResetWithEdits').addEventListener('click', () => {
-            raceStarted = false;
-            raceStartTime = null;
-            startRaceButton.disabled = false;
-            resetRaceButton.disabled = true;
-            // Stop timer
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-            document.getElementById('raceTimer').textContent = '00:00:00:00';
-            // Disable all stop buttons
-            document.querySelectorAll('.stop-button').forEach(button => {
-                button.disabled = true;
-            });
-            
-            // Clear ALL data including local edits
-            localStorage.clear();
-            
-            // Reset to initial state
-            setCurrentCardIndex(0);
-            // Hide modal
-            resetModal.style.display = 'none';
-            // Re-render everything
-            renderCheckpoints();
-            renderTimeline();
-        });
-
         cancelResetButton.addEventListener('click', () => {
             resetModal.style.display = 'none';
         });
@@ -1884,40 +1964,6 @@
                 resetModal.style.display = 'none';
             }
         });
-
-        // Initialize checkpoints
-        const checkpointsContainer = document.getElementById('checkpoints');
-        const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
-        const savedRaceStart = localStorage.getItem('raceStartTime');
-        const savedRaceFinished = localStorage.getItem('raceFinished');
-        const savedRaceFinishTime = localStorage.getItem('raceFinishTime');
-        const savedPace = localStorage.getItem('currentPace');
-        
-        if (savedRaceStart) {
-            raceStarted = true;
-            raceStartTime = new Date(savedRaceStart);
-            startRaceButton.disabled = true;
-            resetRaceButton.disabled = false;
-            if (savedRaceFinished && savedRaceFinishTime) {
-                document.getElementById('raceTimer').textContent = savedRaceFinishTime;
-            } else {
-                // Start timer
-                timerInterval = setInterval(updateTimer, 10);
-                updateTimer();
-            }
-        } else {
-            raceStarted = false;
-            raceStartTime = null;
-            startRaceButton.disabled = false;
-            resetRaceButton.disabled = true;
-            // Clear any existing timer
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-            document.getElementById('raceTimer').textContent = '00:00:00:00';
-        }
-        renderCheckpoints();
 
         // Add a function to sum all sleep durations and update estimated times
         function getTotalSleepMinutes() {
@@ -2143,6 +2189,35 @@
 
         // Check storage quota periodically
         setInterval(checkStorageQuota, 60000); // Check every minute
+
+        // Add event listener for Reset Race & Clear Edits button
+        document.getElementById('confirmResetWithEdits').addEventListener('click', () => {
+            raceStarted = false;
+            raceStartTime = null;
+            startRaceButton.disabled = false;
+            resetRaceButton.disabled = true;
+            // Stop timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            document.getElementById('raceTimer').textContent = '00:00:00:00';
+            // Disable all stop buttons
+            document.querySelectorAll('.stop-button').forEach(button => {
+                button.disabled = true;
+            });
+            
+            // Clear all data including edits
+            localStorage.clear();
+            
+            // Reset to initial state
+            setCurrentCardIndex(0);
+            // Hide modal
+            resetModal.style.display = 'none';
+            // Re-render everything
+            renderCheckpoints();
+            renderTimeline();
+        });
     </script>
     <div style="height: 60px;"></div>
 </body>
