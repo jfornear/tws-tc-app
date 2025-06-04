@@ -1059,22 +1059,22 @@
 
         // Update goal times for new categories
         const checkpointGoals = {
-            "Aquarena Springs - RACE START": {mile: 1, g65: "9:00 AM", g70: "9:00 AM", g80: "9:00 AM", g85: "9:00 AM", g90: "9:00 AM", g100: "9:00 AM"},
-            "Staples - CHECKPOINT 1": {mile: 17, g65: "10:36 AM", g70: "11:01 AM", g80: "12:06 PM", g85: "12:41 PM", g90: "1:16 PM", g100: "2:06 PM"},
-            "Fentress": {mile: 26, g65: "12:16 PM", g70: "12:49 PM", g80: "2:00 PM", g85: "2:41 PM", g90: "3:22 PM", g100: "4:30 PM"},
-            "Stairtown": {mile: 33, g65: "1:16 PM", g70: "1:52 PM", g80: "3:06 PM", g85: "3:51 PM", g90: "4:36 PM", g100: "5:51 PM"},
-            "Luling HWY 90 - CHECKPOINT 2": {mile: 40, g65: "2:09 PM", g70: "2:49 PM", g80: "4:08 PM", g85: "4:58 PM", g90: "5:48 PM", g100: "7:13 PM"},
-            "Luling Dam/Zedler Mill": {mile: 46, g65: "2:56 PM", g70: "3:42 PM", g80: "5:03 PM", g85: "5:58 PM", g90: "6:53 PM", g100: "8:36 PM"},
-            "Palmetto State Park - CHECKPOINT 3": {mile: 60, g65: "5:01 PM", g70: "5:51 PM", g80: "7:39 PM", g85: "8:51 PM", g90: "10:03 PM", g100: "12:31 AM"},
-            "Gonzales Dam - CHECKPOINT 4": {mile: 84, g65: "8:19 PM", g70: "9:25 PM", g80: "11:44 PM", g85: "1:16 AM", g90: "2:48 AM", g100: "5:35 AM"},
-            "Hochheim - CHECKPOINT 5": {mile: 123, g65: "1:44 AM", g70: "3:01 AM", g80: "4:46 AM", g85: "6:13 AM", g90: "7:40 AM", g100: "10:58 AM"},
-            "Cheapside - CHECKPOINT 6": {mile: 148, g65: "5:13 AM", g70: "6:40 AM", g80: "8:50 AM", g85: "10:28 AM", g90: "12:06 PM", g100: "3:11 PM"},
-            "Cuero HWY 236 - CHECKPOINT 7": {mile: 160, g65: "6:08 AM", g70: "7:38 AM", g80: "9:50 AM", g85: "11:32 AM", g90: "1:14 PM", g100: "4:27 PM"},
-            "Thomaston Bridge": {mile: 178, g65: "8:09 AM", g70: "9:44 AM", g80: "12:16 PM", g85: "2:08 PM", g90: "4:00 PM", g100: "7:09 PM"},
-            "Victoria City Park - CHECKPOINT 8": {mile: 200, g65: "10:38 AM", g70: "12:23 PM", g80: "2:51 PM", g85: "4:54 PM", g90: "6:57 PM", g100: "10:29 PM"},
-            "Swinging Bridge - CHECKPOINT 9": {mile: 228, g65: "3:55 PM", g70: "4:43 PM", g80: "7:55 PM", g85: "10:13 PM", g90: "12:31 AM", g100: "5:21 AM"},
-            "Papa & Maga / Calhoun Tivoli - CHECKPOINT 10": {mile: 251, g65: "6:25 PM", g70: "7:19 PM", g80: "12:04 AM", g85: "2:36 AM", g90: "5:08 AM", g100: "9:43 AM"},
-            "Seadrift - RACE FINISH": {mile: 260, g65: "11:14 PM", g70: "1:00 AM", g80: "2:56 AM", g85: "5:04 AM", g90: "7:01 AM", g100: "11:00 AM"}
+            "Aquarena Springs - RACE START": {mile: 0, time: "9:00 AM"},
+            "Staples - CHECKPOINT 1": {mile: 17, time: "12:50 PM"},
+            "Fentress": {mile: 26, time: "3:00 PM"},
+            "Stairtown": {mile: 33, time: "4:39 PM"},
+            "Luling HWY 90 - CHECKPOINT 2": {mile: 40, time: "6:09 PM"},
+            "Luling Dam/Zedler Mill": {mile: 46, time: "7:31 PM"},
+            "Palmetto State Park - CHECKPOINT 3": {mile: 60, time: "10:54 PM"},
+            "Gonzales Dam - CHECKPOINT 4": {mile: 84, time: "4:30 AM"},
+            "Hochheim - CHECKPOINT 5": {mile: 123, time: "1:18 PM"},
+            "Cheapside - CHECKPOINT 6": {mile: 148, time: "7:02 PM"},
+            "Cuero HWY 236 - CHECKPOINT 7": {mile: 160, time: "6:44 PM"},
+            "Thomaston Bridge": {mile: 178, time: "2:08 AM"},
+            "Victoria City Park - CHECKPOINT 8": {mile: 200, time: "7:09 AM"},
+            "Swinging Bridge - CHECKPOINT 9": {mile: 228, time: "2:24 PM"},
+            "Papa & Maga / Calhoun Tivoli - CHECKPOINT 10": {mile: 251, time: "6:02 PM"},
+            "Seadrift - RACE FINISH": {mile: 260, time: "9:02 PM"}
         };
 
         // Helper to get new goal times for a checkpoint
@@ -1460,6 +1460,10 @@
                 tasks.push('Nearby: Buc-ee\'s');
             } else if (checkpoint.name.includes('Victoria City Park')) {
                 tasks.push('Nearby: HEB Plus, Target, Texan, Whataburger, Subway, Domino\'s, Walgreens, Urgent care, ER');
+            } else if (checkpoint.name.includes('Gonzales Dam')) {
+                tasks.push('Nearby: Matamoros Taco Hut (breakfast tacos)');
+            } else if (checkpoint.name.includes('Cuero HWY 236')) {
+                tasks.push('Nearby: La Bella Tavola (Italian)');
             }
 
             // Calculate estimated time for this checkpoint
@@ -1468,13 +1472,37 @@
                 const completionTime = new Date(completedCheckpoint.completionTime);
                 displayTime = `Arrived: ${formatDate(completionTime)} ${formatTime(completionTime)} (${completedCheckpoint.pace ? completedCheckpoint.pace.toFixed(1) : '—'} mph)`;
             } else {
-                const hoursFromStart = parseFloat(checkpoint.mile) / currentPace;
-                const arrival = new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
-                displayTime = `Est. Arrival: ${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph)`;
-                if (checkpoint.time && checkpoint.time.includes('Deadline')) {
-                    const deadline = checkpoint.time.match(/Deadline[^)]+/);
-                    if (deadline) {
-                        displayTime += ` — ${deadline[0]}`;
+                // Use the time from checkpointGoals for initial estimates
+                const cpGoal = checkpointGoals[checkpoint.name];
+                if (cpGoal) {
+                    // Parse the time from the goal (e.g., "12:50 PM")
+                    const [time, period] = cpGoal.time.split(' ');
+                    const [hours, minutes] = time.split(':').map(Number);
+                    let hour = hours;
+                    if (period === 'PM' && hours !== 12) hour += 12;
+                    if (period === 'AM' && hours === 12) hour = 0;
+                    
+                    // Create date object for the goal time
+                    const goalDate = new Date(RACE_START);
+                    goalDate.setHours(hour, minutes, 0, 0);
+                    
+                    displayTime = `Est. Arrival: ${formatDate(goalDate)} ${formatTime(goalDate)} (4.3 mph)`;
+                    if (checkpoint.time && checkpoint.time.includes('Deadline')) {
+                        const deadline = checkpoint.time.match(/Deadline[^)]+/);
+                        if (deadline) {
+                            displayTime += ` — ${deadline[0]}`;
+                        }
+                    }
+                } else {
+                    // Fallback to calculated time if no goal time exists
+                    const hoursFromStart = parseFloat(checkpoint.mile) / currentPace;
+                    const arrival = new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
+                    displayTime = `Est. Arrival: ${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph)`;
+                    if (checkpoint.time && checkpoint.time.includes('Deadline')) {
+                        const deadline = checkpoint.time.match(/Deadline[^)]+/);
+                        if (deadline) {
+                            displayTime += ` — ${deadline[0]}`;
+                        }
                     }
                 }
             }
