@@ -12,8 +12,8 @@
 | Gonzales Dam - CHECKPOINT 4                  | 84   | Sat 4:30 AM   |
 | Hochheim - CHECKPOINT 5                      |123   | Sat 1:18 PM  |
 | Cheapside - CHECKPOINT 6                     |148   | Sat 7:02 PM   |
-| Cuero HWY 236 - CHECKPOINT 7                 |160   | Sat 6:44 PM   |
-| Thomaston Bridge                             |178   | Sat 2:08 AM   |
+| Cuero HWY 236 - CHECKPOINT 7                 |160   | Sat 10:13 PM   |
+| Thomaston Bridge                             |178   | Sun 2:08 AM   |
 | Victoria City Park - CHECKPOINT 8            |200   | Sun 7:09 AM   |
 | Swinging Bridge - CHECKPOINT 9               |228   | Sun 2:24 PM  |
 | Papa & Maga / Calhoun Tivoli - CHECKPOINT 10 |251   | Sun 6:02 PM   |

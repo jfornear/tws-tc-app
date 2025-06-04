@@ -835,7 +835,10 @@
             });
         }
 
-        function formatDate(date) {
+        function formatDate(date, day = null) {
+            if (day) {
+                return day;
+            }
             return date.toLocaleDateString('en-US', {
                 weekday: 'short',
                 month: 'short',
@@ -1059,22 +1062,22 @@
 
         // Update goal times for new categories
         const checkpointGoals = {
-            "Aquarena Springs - RACE START": {mile: 0, time: "9:00 AM"},
-            "Staples - CHECKPOINT 1": {mile: 17, time: "12:50 PM"},
-            "Fentress": {mile: 26, time: "3:00 PM"},
-            "Stairtown": {mile: 33, time: "4:39 PM"},
-            "Luling HWY 90 - CHECKPOINT 2": {mile: 40, time: "6:09 PM"},
-            "Luling Dam/Zedler Mill": {mile: 46, time: "7:31 PM"},
-            "Palmetto State Park - CHECKPOINT 3": {mile: 60, time: "10:54 PM"},
-            "Gonzales Dam - CHECKPOINT 4": {mile: 84, time: "4:30 AM"},
-            "Hochheim - CHECKPOINT 5": {mile: 123, time: "1:18 PM"},
-            "Cheapside - CHECKPOINT 6": {mile: 148, time: "7:02 PM"},
-            "Cuero HWY 236 - CHECKPOINT 7": {mile: 160, time: "6:44 PM"},
-            "Thomaston Bridge": {mile: 178, time: "2:08 AM"},
-            "Victoria City Park - CHECKPOINT 8": {mile: 200, time: "7:09 AM"},
-            "Swinging Bridge - CHECKPOINT 9": {mile: 228, time: "2:24 PM"},
-            "Papa & Maga / Calhoun Tivoli - CHECKPOINT 10": {mile: 251, time: "6:02 PM"},
-            "Seadrift - RACE FINISH": {mile: 260, time: "9:02 PM"}
+            "Aquarena Springs - RACE START": {mile: 0, time: "9:00 AM", day: "Fri"},
+            "Staples - CHECKPOINT 1": {mile: 17, time: "12:50 PM", day: "Fri"},
+            "Fentress": {mile: 26, time: "3:00 PM", day: "Fri"},
+            "Stairtown": {mile: 33, time: "4:39 PM", day: "Fri"},
+            "Luling HWY 90 - CHECKPOINT 2": {mile: 40, time: "6:09 PM", day: "Fri"},
+            "Luling Dam/Zedler Mill": {mile: 46, time: "7:31 PM", day: "Fri"},
+            "Palmetto State Park - CHECKPOINT 3": {mile: 60, time: "10:54 PM", day: "Fri"},
+            "Gonzales Dam - CHECKPOINT 4": {mile: 84, time: "4:30 AM", day: "Sat"},
+            "Hochheim - CHECKPOINT 5": {mile: 123, time: "1:18 PM", day: "Sat"},
+            "Cheapside - CHECKPOINT 6": {mile: 148, time: "7:02 PM", day: "Sat"},
+            "Cuero HWY 236 - CHECKPOINT 7": {mile: 160, time: "10:13 PM", day: "Sat"},
+            "Thomaston Bridge": {mile: 178, time: "2:08 AM", day: "Sun"},
+            "Victoria City Park - CHECKPOINT 8": {mile: 200, time: "7:09 AM", day: "Sun"},
+            "Swinging Bridge - CHECKPOINT 9": {mile: 228, time: "2:24 PM", day: "Sun"},
+            "Papa & Maga / Calhoun Tivoli - CHECKPOINT 10": {mile: 251, time: "6:02 PM", day: "Sun"},
+            "Seadrift - RACE FINISH": {mile: 260, time: "9:02 PM", day: "Sun"}
         };
 
         // Helper to get new goal times for a checkpoint
@@ -1105,24 +1108,72 @@
             return new Date(currentTime.getTime() + (hoursToNext * 60 * 60 * 1000));
         }
 
-        // Update the calculateEstimatedArrival function
+        // Add helper function to calculate day based on hours from race start
+        function calculateDayFromHours(hoursFromStart) {
+            // Use the actual race start date (June 13, 2025) which is a Friday
+            const raceStartDay = 5; // Friday (0 = Sunday, 5 = Friday)
+            const totalDays = Math.floor(hoursFromStart / 24);
+            const dayOffset = (raceStartDay + totalDays) % 7;
+            
+            // Map day numbers to our race days
+            const dayMap = {
+                5: 'Fri', // Friday
+                6: 'Sat', // Saturday
+                0: 'Sun', // Sunday
+                1: 'Mon'  // Monday
+            };
+            
+            return dayMap[dayOffset] || 'Mon'; // Default to Mon if somehow outside our range
+        }
+
+        // Update the calculateEstimatedArrival function to include day calculation
         function calculateEstimatedArrival(mile, currentPace) {
-            // Get the actual race start time from localStorage or use current time for testing
-            const raceStart = raceStarted ? raceStartTime : new Date();
+            if (!raceStarted) {
+                // If race hasn't started, use the time chart times
+                const cpGoal = checkpointGoals[checkpoints.find(cp => parseFloat(cp.mile) === mile)?.name];
+                if (cpGoal) {
+                    const [time, period] = cpGoal.time.split(' ');
+                    const [hours, minutes] = time.split(':').map(Number);
+                    let hour = hours;
+                    if (period === 'PM' && hours !== 12) hour += 12;
+                    if (period === 'AM' && hours === 12) hour = 0;
+                    
+                    const goalDate = new Date(RACE_START);
+                    goalDate.setHours(hour, minutes, 0, 0);
+                    return { time: goalDate, pace: 4.3, day: cpGoal.day };
+                }
+            }
+
+            // Get the last completed checkpoint
+            const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
+            const lastCompleted = completed[completed.length - 1];
             
-            // Calculate total hours from start based on current pace
-            const totalHours = mile / currentPace;
+            if (!lastCompleted) {
+                // If no checkpoints completed, use race start time
+                const hoursFromStart = mile / currentPace;
+                const arrival = new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
+                const day = calculateDayFromHours(hoursFromStart);
+                return { time: arrival, pace: currentPace, day };
+            }
+
+            // Calculate time based on last checkpoint
+            const lastMile = parseFloat(lastCompleted.mile);
+            const lastTime = new Date(lastCompleted.completionTime);
+            const milesToGo = mile - lastMile;
+            const hoursToGo = milesToGo / currentPace;
+            const arrival = new Date(lastTime.getTime() + (hoursToGo * 60 * 60 * 1000));
             
-            // Calculate arrival time by adding hours to start time
-            const arrivalTime = new Date(raceStart.getTime() + (totalHours * 60 * 60 * 1000));
+            // Calculate total hours from race start
+            const totalHoursFromStart = (arrival - RACE_START) / (1000 * 60 * 60);
+            const day = calculateDayFromHours(totalHoursFromStart);
             
-            return arrivalTime;
+            return { time: arrival, pace: currentPace, day };
         }
 
         // Update the calculateCurrentPace function to be more accurate
         function calculateCurrentPace() {
             if (!raceStarted) {
-                return 4.5; // Default pace if race hasn't started
+                return 4.3; // Default pace if race hasn't started
             }
             
             // Try to get saved pace first
@@ -1133,7 +1184,7 @@
             
             const completed = JSON.parse(localStorage.getItem('completedCheckpoints') || '[]');
             if (completed.length < 2) {
-                return 4.5; // Default pace if not enough checkpoints
+                return 4.3; // Default pace if not enough checkpoints
             }
             
             // Calculate pace based on last two checkpoints for more accuracy
@@ -1167,7 +1218,7 @@
                     // Update estimated time under checkpoint name
                     const headerTime = checkpointElement.querySelector('.checkpoint-time');
                     if (headerTime) {
-                        let headerText = `Est. Arrival: ${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph)`;
+                        let headerText = `Est. Arrival: ${formatDate(arrival.time)} ${formatTime(arrival.time)} (${currentPace.toFixed(1)} mph)`;
                         if (cp.time && cp.time.includes('Deadline')) {
                             const deadline = cp.time.match(/Deadline[^)]+/);
                             if (deadline) {
@@ -1276,7 +1327,7 @@
             }
         }
 
-        function createCheckpointElement(checkpoint, badgePace = 4.5, estimatedTime = null, completedCheckpoint = null, isNext = false) {
+        function createCheckpointElement(checkpoint, badgePace = 4.3, estimatedTime = null, completedCheckpoint = null, isNext = false) {
             const div = document.createElement('div');
             div.className = 'checkpoint';
             div.setAttribute('data-checkpoint', checkpoint.name);
@@ -1472,32 +1523,11 @@
                 const completionTime = new Date(completedCheckpoint.completionTime);
                 displayTime = `Arrived: ${formatDate(completionTime)} ${formatTime(completionTime)} (${completedCheckpoint.pace ? completedCheckpoint.pace.toFixed(1) : '—'} mph)`;
             } else {
-                // Use the time from checkpointGoals for initial estimates
-                const cpGoal = checkpointGoals[checkpoint.name];
-                if (cpGoal) {
-                    // Parse the time from the goal (e.g., "12:50 PM")
-                    const [time, period] = cpGoal.time.split(' ');
-                    const [hours, minutes] = time.split(':').map(Number);
-                    let hour = hours;
-                    if (period === 'PM' && hours !== 12) hour += 12;
-                    if (period === 'AM' && hours === 12) hour = 0;
-                    
-                    // Create date object for the goal time
-                    const goalDate = new Date(RACE_START);
-                    goalDate.setHours(hour, minutes, 0, 0);
-                    
-                    displayTime = `Est. Arrival: ${formatDate(goalDate)} ${formatTime(goalDate)} (4.3 mph)`;
-                    if (checkpoint.time && checkpoint.time.includes('Deadline')) {
-                        const deadline = checkpoint.time.match(/Deadline[^)]+/);
-                        if (deadline) {
-                            displayTime += ` — ${deadline[0]}`;
-                        }
-                    }
-                } else {
-                    // Fallback to calculated time if no goal time exists
-                    const hoursFromStart = parseFloat(checkpoint.mile) / currentPace;
-                    const arrival = new Date(RACE_START.getTime() + (hoursFromStart * 60 * 60 * 1000));
-                    displayTime = `Est. Arrival: ${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph)`;
+                const currentPace = calculateCurrentPace();
+                const estimated = calculateEstimatedArrival(parseFloat(checkpoint.mile), currentPace);
+                
+                if (estimated) {
+                    displayTime = `Est. Arrival: ${formatDate(estimated.time, estimated.day)} ${formatTime(estimated.time)} (${estimated.pace.toFixed(1)} mph)`;
                     if (checkpoint.time && checkpoint.time.includes('Deadline')) {
                         const deadline = checkpoint.time.match(/Deadline[^)]+/);
                         if (deadline) {
@@ -1512,7 +1542,7 @@
                 const finished = localStorage.getItem('raceFinished');
                 let finishTime = localStorage.getItem('raceFinishTime');
                 let displayTime = '--';
-                let finalPace = 4.5;
+                let finalPace = 4.3;
                 const totalMiles = 260;
                 const savedRaceStart = localStorage.getItem('raceStartTime');
                 if (finished && finishTime && savedRaceStart) {
@@ -1524,13 +1554,14 @@
                     }
                     // Format the finish time to match other checkpoint cards
                     const finishDate = new Date(new Date(savedRaceStart).getTime() + (totalHours * 60 * 60 * 1000));
-                    displayTime = `Finished ${formatDate(finishDate)} ${formatTime(finishDate)} (${finishTime})`;
+                    displayTime = `Finished: ${formatDate(finishDate)} ${formatTime(finishDate)} (${finishTime})`;
                 } else {
                     // Calculate estimated arrival based on total race distance
                     const currentPace = calculateCurrentPace();
-                    const hoursFromStart = totalMiles / currentPace; // Total race distance / current pace
-                    const arrival = new Date(RACE_START.getTime() + hoursFromStart * 60 * 60 * 1000);
-                    displayTime = `${formatDate(arrival)} ${formatTime(arrival)} (${currentPace.toFixed(1)} mph) — Deadline 1:00 PM Tuesday`;
+                    const estimated = calculateEstimatedArrival(parseFloat(checkpoint.mile), currentPace);
+                    if (estimated) {
+                        displayTime = `Est. Arrival: ${formatDate(estimated.time, estimated.day)} ${formatTime(estimated.time)} (${estimated.pace.toFixed(1)} mph) — Deadline 1:00 PM Tuesday`;
+                    }
                     finalPace = currentPace;
                 }
                 div.innerHTML = `
